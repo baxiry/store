@@ -1,0 +1,83 @@
+* {    
+   /* padding:0;  
+   padding-top:20px;  
+   margin-top:20px; */                                    
+   margin-left:0px;                                          
+}       
+button {
+    width:220px;
+}
+nav {
+    box-shadow: 0 2px 4px 0 #CFCFCF;/* rgba(0,0,0,0.2);*/
+    transition: 0.3s;
+    padding: 10px;
+    background-color: #f2efef;
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    /* transparent:0.5;
+    margin-left:-7px; */
+}
+nav:hover {
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.2);
+}
+nav a {
+    text-decoration:none;
+    padding: 10px;
+}
+nav a:hover {
+    background-color: #b4deee;
+    box-shadow: 0 1px 2px 0 #e8e8e8;
+}
+
+#acount {
+    background-color:#E2E2E2;
+    margin-left:55%;
+}
+#acount:hover {
+    background-color:#FFDEAD;
+    margin-left:720px;
+}
+
+body {
+    background-color: #F8F8F8;
+    margin-top:50px;
+}
+span {
+    background-color: #F29D8A;
+}
+nav > a {
+    padding-left:10px;
+}
+#center {
+    padding:150px;
+    padding-top:100px;
+}
+
+#fadein {
+	-webkit-animation: fadeIn 500ms both;
+  	animation: fadeIn 500ms both;
+  	-webkit-animation-delay: 500ms;
+  	animation-delay: 500ms;
+}
+
+/* fadeIn animation */
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
