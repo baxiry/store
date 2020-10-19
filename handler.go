@@ -10,7 +10,7 @@ import (
 )
 
 // this map for store and manage user session
-//var userSession map[string]string
+var userSession = map[string]string{}
 
 func mysess(c echo.Context, email string) {
 	sess, _ := session.Get("session", c)
@@ -29,6 +29,7 @@ func login(c echo.Context) error {
 	name, email, pass := getUsername(femail)
 
 	if pass == fpass && femail == email {
+		userSession[email] = name
 		mysess(c, email)
 		return c.Render(200, "home.html", name)
 	}
@@ -49,8 +50,10 @@ func signup(c echo.Context) error {
 }
 
 func home(c echo.Context) error {
+	sess, _ := session.Get("session", c)
+	email := sess.Values["email"]
 
-	return c.Render(http.StatusOK, "home.html", nil)
+	return c.Render(http.StatusOK, "home.html", userSession[email.(string)])
 }
 
 func signPage(c echo.Context) error {
