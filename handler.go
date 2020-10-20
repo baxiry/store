@@ -31,7 +31,7 @@ func login(c echo.Context) error {
 	if pass == fpass && femail == email {
 		userSession[email] = name
 		mysess(c, email)
-		return c.Render(200, "home.html", name)
+		return c.Redirect(http.StatusSeeOther, "/") // 303 code
 	}
 	return c.Render(200, "login.html", "wrone password")
 }
@@ -44,9 +44,9 @@ func signup(c echo.Context) error {
 	err := insertUser(name, pass, email, phon)
 	if err != nil {
 		fmt.Println(err)
-		return c.Render(200, "sign.html", "wrrone") // gin.H{})
+		return c.Render(200, "sign.html", "wrrone")
 	}
-	return c.Render(200, "login.html", "welcome") // gin.H{})
+	return c.Render(200, "login.html", "welcome")
 }
 
 func home(c echo.Context) error {
@@ -57,7 +57,7 @@ func home(c echo.Context) error {
 }
 
 func signPage(c echo.Context) error {
-	return c.Render(200, "sign.html", nil) // gin.H{})
+	return c.Render(200, "sign.html", nil)
 }
 
 func loginPage(c echo.Context) error {
@@ -65,11 +65,14 @@ func loginPage(c echo.Context) error {
 }
 
 func stores(c echo.Context) error {
-	return c.Render(200, "stores.html", "hi") // gin.H{})
+	sess, _ := session.Get("session", c)
+	email := sess.Values["email"]
+
+	return c.Render(200, "stores.html", userSession[email.(string)])
 }
 
 func acount(c echo.Context) error {
-	return c.Render(200, "acount.html", "adam") //[]string{name, "my acount"})
+	return c.Render(200, "acount.html", "") //[]string{name, "my acount"})
 }
 
 // e.GET("/users/:id", getUser)

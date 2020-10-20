@@ -22,6 +22,7 @@ func main() {
 	e.GET("/sign", signPage)
 	e.POST("/sign", signup)
 	e.GET("/login", loginPage)
+	e.GET("/stores", stores)
 	e.POST("/login", login)
 	e.GET("/:id", getUser)
 	e.Logger.Fatal(e.Start(":8888"))
