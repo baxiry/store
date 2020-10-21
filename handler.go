@@ -9,9 +9,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// this map for store and manage user session
-var userSession = map[string]string{}
-
 func mysess(c echo.Context, email string) {
 	sess, _ := session.Get("session", c)
 	sess.Options = &sessions.Options{
@@ -53,7 +50,7 @@ func home(c echo.Context) error {
 	sess, _ := session.Get("session", c)
 	email := sess.Values["email"]
 
-	return c.Render(http.StatusOK, "home.html", userSession[email.(string)])
+	return c.Render(http.StatusOK, "home.html", getUserSess(email)) //userSession[email.(string)])
 }
 
 func signPage(c echo.Context) error {
@@ -82,7 +79,16 @@ func getUser(c echo.Context) error {
 	return c.Render(http.StatusOK, "user.html", id)
 }
 
-// hello func
+// this map for store and manage user session
+var userSession = map[string]string{}
+
+// getUserSess takes user email then returns username to display it
+func getUserSess(us interface{}) string {
+	if len(userSession) == 0 {
+		return ""
+	}
+	return userSession[us.(string)]
+}
 
 /* Cookies
 
