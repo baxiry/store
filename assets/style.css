@@ -25,6 +25,11 @@ nav a {
     text-decoration:none;
     padding: 10px;
 }
+
+nav > a {
+    padding-left:10px;
+}
+
 nav a:hover {
     background-color: #b4deee;
     box-shadow: 0 1px 2px 0 #e8e8e8;
@@ -34,23 +39,23 @@ nav a:hover {
     background-color:#E2E2E2;
     margin-left:55%;
 }
+
 #acount:hover {
     background-color:#FFDEAD;
     margin-left:720px;
 }
 
 body {
-    background-color: #F8F8F8;
+    //background-color: #F8F8F8;
     margin-top:50px;
 }
+
 span {
     background-color: #F29D8A;
 }
-nav > a {
-    padding-left:10px;
-}
 #center {
     padding:150px;
+    padding-bottom: 0px;
     padding-top:100px;
 }
 

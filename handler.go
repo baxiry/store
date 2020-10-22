@@ -43,7 +43,8 @@ func signup(c echo.Context) error {
 		fmt.Println(err)
 		return c.Render(200, "sign.html", "wrrone")
 	}
-	return c.Render(200, "login.html", "welcome")
+	return c.Redirect(http.StatusSeeOther, "/login") // 303 code
+	//return c.Render(200, "login.html", "welcome")
 }
 
 func home(c echo.Context) error {
