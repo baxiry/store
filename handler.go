@@ -51,7 +51,7 @@ func home(c echo.Context) error {
 	sess, _ := session.Get("session", c)
 	email := sess.Values["email"]
 
-	return c.Render(http.StatusOK, "home.html", getUserSess(email)) //userSession[email.(string)])
+	return c.Render(http.StatusOK, "home.html", getUserSess(email))
 }
 
 func signPage(c echo.Context) error {
