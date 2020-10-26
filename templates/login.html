@@ -1,5 +1,5 @@
 {{template "header.html"}}
-   <a id="acount" href="/{{.}}">{{.}}</a>
+   <a id="acount" href="/{{.}}"></a>
    </nav>
 <body>
 
@@ -8,7 +8,7 @@
     <input name=email type=text placeholder=email pattern=".{6,40}" autofocus required><br><br>
     <input name=password type=password placeholder=password required><br><br>
     <input type=submit value=submit>
-    <h3>{{.}}</h4>
+    <h4 style="">{{.}}</h4>
 </div>
 </body>
 <style>
@@ -28,6 +28,9 @@ button {
 }
 #acount {
     //align:right;
+}
+h4 {
+    color: red;
 }
 </style>
 </html>

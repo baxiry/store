@@ -30,7 +30,7 @@ func login(c echo.Context) error {
 		mysess(c, email)
 		return c.Redirect(http.StatusSeeOther, "/") // 303 code
 	}
-	return c.Render(200, "login.html", "wrone password")
+	return c.Render(200, "login.html", "Username or password is wrong")
 }
 
 func signup(c echo.Context) error {
