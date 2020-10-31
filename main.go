@@ -24,6 +24,7 @@ func main() {
 	e.GET("/login", loginPage)
 	e.GET("/stores", stores)
 	e.POST("/login", login)
-	e.GET("/:id", getUser)
+	//e.GET("/:id", getUser)
+
 	e.Logger.Fatal(e.Start(":8888"))
 }
