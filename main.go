@@ -17,6 +17,7 @@ func main() {
 	e.Renderer = templ()
 
 	e.Static("a", "assets")
+	e.Static("files", "../files")
 
 	e.GET("/", home)
 	e.GET("/sign", signPage)
@@ -24,7 +25,10 @@ func main() {
 	e.GET("/login", loginPage)
 	e.GET("/stores", stores)
 	e.POST("/login", login)
-	//e.GET("/:id", getUser)
+	e.GET("/:id", getUser)
+
+	e.GET("/upload", uploadPage)
+	e.POST("/upload", upload)
 
 	e.Logger.Fatal(e.Start(":8888"))
 }

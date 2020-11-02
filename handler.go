@@ -2,12 +2,60 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 )
+
+func uploadPage(c echo.Context) error {
+	return c.Render(200, "upload.html", nil)
+}
+func upload(c echo.Context) error {
+	// Read form fields
+	name := c.FormValue("name")
+	email := c.FormValue("email")
+
+	//------------
+	// Read files
+	//------------
+
+	// Multipart form
+	form, err := c.MultipartForm()
+	if err != nil {
+		return err
+	}
+	files := form.File["files"]
+
+	for _, file := range files {
+		// Source
+		src, err := file.Open()
+		if err != nil {
+			return err
+		}
+		defer src.Close()
+
+		// Destination
+		dst, err := os.Create("../files/" + file.Filename)
+		if err != nil {
+			return err
+		}
+		defer dst.Close()
+
+		// Copy
+		if _, err = io.Copy(dst, src); err != nil {
+			return err
+		}
+
+	}
+
+	return c.HTML(http.StatusOK, fmt.Sprintf(
+		"<p>Uploaded successfully %d files with fields name=%s and email=%s.</p>",
+		len(files), name, email))
+}
 
 // this map for store and manage user session
 var userSession = map[interface{}]string{}
