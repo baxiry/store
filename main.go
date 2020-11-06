@@ -30,5 +30,5 @@ func main() {
 	e.GET("/upload", uploadPage)
 	e.POST("/upload", upload)
 
-	e.Logger.Fatal(e.Start(":8888"))
+	e.Logger.Fatal(e.Start(":8080"))
 }

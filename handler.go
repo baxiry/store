@@ -12,17 +12,16 @@ import (
 )
 
 func uploadPage(c echo.Context) error {
+	// c.Response().Status
 	return c.Render(200, "upload.html", nil)
 }
+
 func upload(c echo.Context) error {
 	// Read form fields
-	name := c.FormValue("name")
-	email := c.FormValue("email")
+	//name := c.FormValue("name")
+	//email := c.FormValue("email")
 
-	//------------
 	// Read files
-	//------------
-
 	// Multipart form
 	form, err := c.MultipartForm()
 	if err != nil {
@@ -52,9 +51,7 @@ func upload(c echo.Context) error {
 
 	}
 
-	return c.HTML(http.StatusOK, fmt.Sprintf(
-		"<p>Uploaded successfully %d files with fields name=%s and email=%s.</p>",
-		len(files), name, email))
+	return c.Render(http.StatusOK, "home.html", nil) //fmt.Sprintf("<p>Uploaded successfully %d files with fields name=%s and email=%s.</p>",len(files), name, email))
 }
 
 // this map for store and manage user session
@@ -100,7 +97,21 @@ func signup(c echo.Context) error {
 func home(c echo.Context) error {
 	sess, _ := session.Get("session", c)
 	email := sess.Values["email"]
-	return c.Render(http.StatusOK, "home.html", userSession[email]) //getUserSess(email))
+	fmt.Println(email)
+
+	file, err := os.Open("../files")
+	if err != nil {
+		fmt.Printf("failed opening directory: %s\n", err)
+	}
+	defer file.Close()
+
+	Photonames := make([]string, 0)
+	list, _ := file.Readdirnames(0) // 0 to read all files and folders
+	for _, name := range list {
+		Photonames = append(Photonames, name)
+	}
+
+	return c.Render(http.StatusOK, "home.html", Photonames) //, userSession[email]) //getUserSess(email))
 }
 
 func signPage(c echo.Context) error {

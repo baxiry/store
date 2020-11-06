@@ -1,10 +1,13 @@
 {{template "header.html"}}
-<a id="acount" href="/{{.}}">{{.}}</a>
+<a id="acount" href="/{{.}}"></a>
    </nav>
 <body>
 <!-- header is head and navbar -->
 <div id="center">                                                        
-    <img src="files/cartoonface.jpg"/>
+    {{ range . }} 
+    <img src="files/{{.}}"/>
+    {{ end }}
+    <p>end</p>
     <img src="a/imgs/nature.jpg"/>
 </div>
 <!--<img src="data:image/png;base64, .... -->
