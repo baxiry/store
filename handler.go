@@ -111,7 +111,11 @@ func home(c echo.Context) error {
 		Photonames = append(Photonames, name)
 	}
 
-	return c.Render(http.StatusOK, "home.html", Photonames) //, userSession[email]) //getUserSess(email))
+	data := make(map[string]interface{}, 2)
+	data["name"] = userSession[email]
+	data["photo"] = Photonames
+
+	return c.Render(http.StatusOK, "home.html", data) //, userSession[email]) //getUserSess(email))
 }
 
 func signPage(c echo.Context) error {

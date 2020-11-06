@@ -1,10 +1,10 @@
 {{template "header.html"}}
-<a id="acount" href="/{{.}}"></a>
+<a id="acount" href="/{{.}}">{{.name}}</a>
    </nav>
 <body>
 <!-- header is head and navbar -->
 <div id="center">                                                        
-    {{ range . }} 
+    {{ range .photo }} 
     <img src="files/{{.}}"/>
     {{ end }}
     <p>end</p>
