@@ -2,57 +2,13 @@ package main
 
 import (
 	"fmt"
-	"io"
-	"net/http"
-	"os"
-
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
+	"io"
+	"net/http"
+	"os"
 )
-
-func uploadPage(c echo.Context) error {
-	// c.Response().Status
-	return c.Render(200, "upload.html", nil)
-}
-
-func upload(c echo.Context) error {
-	// Read form fields
-	//name := c.FormValue("name")
-	//email := c.FormValue("email")
-
-	// Read files
-	// Multipart form
-	form, err := c.MultipartForm()
-	if err != nil {
-		return err
-	}
-	files := form.File["files"]
-
-	for _, file := range files {
-		// Source
-		src, err := file.Open()
-		if err != nil {
-			return err
-		}
-		defer src.Close()
-
-		// Destination
-		dst, err := os.Create("../files/" + file.Filename)
-		if err != nil {
-			return err
-		}
-		defer dst.Close()
-
-		// Copy
-		if _, err = io.Copy(dst, src); err != nil {
-			return err
-		}
-
-	}
-
-	return c.Render(http.StatusOK, "home.html", nil) //fmt.Sprintf("<p>Uploaded successfully %d files with fields name=%s and email=%s.</p>",len(files), name, email))
-}
 
 // this map for store and manage user session
 var userSession = map[interface{}]string{}
@@ -134,7 +90,9 @@ func stores(c echo.Context) error {
 }
 
 func acount(c echo.Context) error {
-	return c.Render(200, "acount.html", "") //[]string{name, "my acount"})
+	name := c.Param("name")
+	fmt.Println("param is : ", name)
+	return c.Render(200, "acount.html", name) //[]string{name, "my acount"})
 }
 
 // e.GET("/users/:id", getUser)
@@ -142,6 +100,45 @@ func getUser(c echo.Context) error {
 	// User ID from path `users/:id`
 	id := c.Param("id")
 	return c.Render(http.StatusOK, "user.html", id)
+}
+
+// upload photos
+func uploadPage(c echo.Context) error {
+	// c.Response().Status
+	return c.Render(200, "upload.html", nil)
+}
+
+func upload(c echo.Context) error {
+	// Read form fields
+	//name := c.FormValue("name")
+	//email := c.FormValue("email")
+
+	// Read files
+	// Multipart form
+	form, err := c.MultipartForm()
+	if err != nil {
+		return err
+	}
+	files := form.File["files"]
+	for _, file := range files {
+		// Source
+		src, err := file.Open()
+		if err != nil {
+			return err
+		}
+		defer src.Close()
+		// Destination
+		dst, err := os.Create("../files/" + file.Filename)
+		if err != nil {
+			return err
+		}
+		defer dst.Close()
+		// Copy
+		if _, err = io.Copy(dst, src); err != nil {
+			return err
+		}
+	}
+	return c.Render(http.StatusOK, "home.html", nil) //fmt.Sprintf("<p>Uploaded successfully %d files with fields name=%s and email=%s.</p>",len(files), name, email))
 }
 
 /* Cookies

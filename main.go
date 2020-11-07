@@ -16,16 +16,18 @@ func main() {
 
 	e.Renderer = templ()
 
-	e.Static("a", "assets")
-	e.Static("files", "../files")
+	e.Static("/a", "assets")
+	e.Static("acount/a", "assets")
+	e.Static("acount/files", "../files")
 
 	e.GET("/", home)
 	e.GET("/sign", signPage)
 	e.POST("/sign", signup)
 	e.GET("/login", loginPage)
 	e.GET("/stores", stores)
+	e.GET("/acount/:name", acount)
 	e.POST("/login", login)
-	e.GET("/:id", getUser)
+	e.GET("/:user", getUser)
 
 	e.GET("/upload", uploadPage)
 	e.POST("/upload", upload)
