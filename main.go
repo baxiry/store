@@ -19,6 +19,7 @@ func main() {
 	e.Static("/a", "assets")
 	e.Static("acount/a", "assets")
 	e.Static("acount/files", "../files")
+	e.Static("files", "../files")
 
 	e.GET("/", home)
 	e.GET("/sign", signPage)
