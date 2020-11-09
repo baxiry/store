@@ -109,12 +109,8 @@ func uploadPage(c echo.Context) error {
 }
 
 func upload(c echo.Context) error {
-	// Read form fields
-	//name := c.FormValue("name")
-	//email := c.FormValue("email")
 
-	// Read files
-	// Multipart form
+	// Read files, Multipart form
 	form, err := c.MultipartForm()
 	if err != nil {
 		return err
@@ -138,7 +134,8 @@ func upload(c echo.Context) error {
 			return err
 		}
 	}
-	return c.Render(http.StatusOK, "home.html", nil) //fmt.Sprintf("<p>Uploaded successfully %d files with fields name=%s and email=%s.</p>",len(files), name, email))
+	return c.Redirect(http.StatusSeeOther, "/") // 303 code
+	//return c.Render(http.StatusOK, "home.html", nil) //fmt.Sprintf("<p>Uploaded successfully %d files with fields name=%s and email=%s.</p>",len(files), name, email))
 }
 
 /* Cookies
