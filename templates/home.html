@@ -5,12 +5,13 @@
 <!-- header is head and navbar -->
 <div id="center">                                                        
     {{ range .photo }} 
-    <img src="files/{{.}}"/>
+    <a href="files/{{.}}"><img src="files/{{.}}"/></a>
     {{ end }}
     <!--<img src="a/imgs/nature.jpg"/>-->
 </div>
 <!--<img src="data:image/png;base64, .... -->
 
+{{template "footer.html"}}
 </body>
 <script src=a/app.js></script>
 <style>

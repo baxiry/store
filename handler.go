@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/gorilla/sessions"
-	"github.com/labstack/echo-contrib/session"
-	"github.com/labstack/echo/v4"
 	"io"
 	"net/http"
 	"os"
+
+	"github.com/gorilla/sessions"
+	"github.com/labstack/echo-contrib/session"
+	"github.com/labstack/echo/v4"
 )
 
 // this map for store and manage user session
@@ -71,7 +72,9 @@ func home(c echo.Context) error {
 	data["name"] = userSession[email]
 	data["photo"] = Photonames
 
-	return c.Render(http.StatusOK, "home.html", data) //, userSession[email]) //getUserSess(email))
+	err = c.Render(http.StatusOK, "home.html", data) //, userSession[email]) //getUserSess(email))
+	fmt.Println("error is : ", err)
+	return err
 }
 
 func signPage(c echo.Context) error {
