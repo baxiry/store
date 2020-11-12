@@ -72,9 +72,7 @@ func home(c echo.Context) error {
 	data["name"] = userSession[email]
 	data["photo"] = Photonames
 
-	err = c.Render(http.StatusOK, "home.html", data) //, userSession[email]) //getUserSess(email))
-	fmt.Println("error is : ", err)
-	return err
+	return c.Render(http.StatusOK, "home.html", data) //, userSession[email]) //getUserSess(email))
 }
 
 func signPage(c echo.Context) error {
@@ -107,11 +105,19 @@ func getUser(c echo.Context) error {
 
 // upload photos
 func uploadPage(c echo.Context) error {
+	sess, err := session.Get("session", c)
+	if err != nil {
+		fmt.Println("erro upload session is : ", err)
+	}
+	email := sess.Values["email"]
+
 	// c.Response().Status
-	return c.Render(200, "upload.html", nil)
+	return c.Render(200, "upload.html", userSession[email])
 }
 
 func upload(c echo.Context) error {
+	name := c.FormValue("name")
+	fmt.Println(name)
 
 	// Read files, Multipart form
 	form, err := c.MultipartForm()
@@ -140,6 +146,9 @@ func upload(c echo.Context) error {
 	return c.Redirect(http.StatusSeeOther, "/") // 303 code
 	//return c.Render(http.StatusOK, "home.html", nil) //fmt.Sprintf("<p>Uploaded successfully %d files with fields name=%s and email=%s.</p>",len(files), name, email))
 }
+
+// TODO store all session in dedicated file or database later
+// becose when restart server not lose currents session clients.
 
 /* Cookies
 
