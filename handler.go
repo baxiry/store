@@ -54,7 +54,6 @@ func signup(c echo.Context) error {
 func home(c echo.Context) error {
 	sess, _ := session.Get("session", c)
 	email := sess.Values["email"]
-	fmt.Println(email)
 
 	file, err := os.Open("../files")
 	if err != nil {
@@ -116,8 +115,14 @@ func uploadPage(c echo.Context) error {
 }
 
 func upload(c echo.Context) error {
+	// TODO: how upload this ?.  definde uploader by session
+
 	name := c.FormValue("name")
+	cat := c.FormValue("catigory")
+	des := c.FormValue("description")
 	fmt.Println(name)
+	fmt.Println(cat)
+	fmt.Println(des)
 
 	// Read files, Multipart form
 	form, err := c.MultipartForm()

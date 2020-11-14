@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 var (
@@ -11,19 +12,23 @@ var (
 )
 
 func setdb() *sql.DB {
-	db, err = sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/?charset=utf8&parseTime=True&loc=Local")
+	db, err = sql.Open(
+		"mysql", "root:@tcp(127.0.0.1:3306)/?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
 		panic(err.Error())
 	}
+	fmt.Println("new db connection")
 	return db
 }
 
 // get all username
 func getUsername(femail string) (string, string, string) {
 	var name, email, password string
-	err := db.QueryRow("SELECT username, email, password FROM stores.users WHERE email = ?", femail).Scan(&name, &email, &password)
+	err := db.QueryRow(
+		"SELECT username, email, password FROM stores.users WHERE email = ?",
+		femail).Scan(&name, &email, &password)
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println("no result or", err.Error())
 	}
 	return name, email, password
 }
