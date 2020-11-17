@@ -36,3 +36,7 @@ DROP TABLE table_name;
 // remove column:
 ALTER TABLE products DROP COLUMN owner;
 
+// fix string encoding error
+ALTER DATABASE <db_name> CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE <table_name> CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
