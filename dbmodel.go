@@ -20,6 +20,19 @@ func setdb() *sql.DB {
 	fmt.Println("new db connection")
 	return db
 }
+func insertProduct(owner, title, details, picts string, price int) error {
+	insert, err := db.Query(
+		"INSERT INTO stores.products(owner, title, description, price, photos) VALUES ( ?, ?, ?, ?, ?)",
+		owner, title, details, price, picts)
+
+	// if there is an error inserting, handle it
+	if err != nil {
+		return err
+	}
+	// be careful deferring Queries if you are using transactions
+	defer insert.Close()
+	return nil
+}
 
 // get all username
 func getUsername(femail string) (string, string, string) {

@@ -5,11 +5,66 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 )
+
+func upload(c echo.Context) error {
+	// TODO: how upload this ?.  definde uploader by session
+	sess, _ := session.Get("session", c)
+	email := sess.Values["email"]
+	fmt.Println("email of owner session", email)
+
+	title := c.FormValue("title")
+	//catigory := c.FormValue("catigory")
+	details := c.FormValue("description")
+	//p := c.FormValue("price")
+	price, _ := strconv.Atoi(c.FormValue("price"))
+
+	// Read files, Multipart form
+	form, err := c.MultipartForm()
+	if err != nil {
+		return err
+	}
+	files := form.File["files"]
+	//fmt.Println("files is :", files[0].Filename)
+	picts := ""
+	for _, v := range files {
+		fmt.Println(v.Filename)
+		picts += v.Filename
+		fmt.Println(picts)
+		// TODO Rename pictures.
+	}
+
+	err = insertProduct(email.(string), title, details, picts, price)
+	if err != nil {
+		fmt.Println("error in insert product", err)
+	}
+
+	for _, file := range files {
+		// Source
+		src, err := file.Open()
+		if err != nil {
+			return err
+		}
+		defer src.Close()
+		// Destination
+		dst, err := os.Create("../files/" + file.Filename)
+		if err != nil {
+			return err
+		}
+		defer dst.Close()
+		// Copy
+		if _, err = io.Copy(dst, src); err != nil {
+			return err
+		}
+	}
+	return c.Redirect(http.StatusSeeOther, "/") // 303 code
+	//return c.Render(http.StatusOK, "home.html", nil) //fmt.Sprintf("<p>Uploaded successfully %d files with fields name=%s and email=%s.</p>",len(files), name, email))
+}
 
 // this map for store and manage user session
 var userSession = map[interface{}]string{}
@@ -112,44 +167,6 @@ func uploadPage(c echo.Context) error {
 
 	// c.Response().Status
 	return c.Render(200, "upload.html", userSession[email])
-}
-
-func upload(c echo.Context) error {
-	// TODO: how upload this ?.  definde uploader by session
-
-	name := c.FormValue("name")
-	cat := c.FormValue("catigory")
-	des := c.FormValue("description")
-	fmt.Println(name)
-	fmt.Println(cat)
-	fmt.Println(des)
-
-	// Read files, Multipart form
-	form, err := c.MultipartForm()
-	if err != nil {
-		return err
-	}
-	files := form.File["files"]
-	for _, file := range files {
-		// Source
-		src, err := file.Open()
-		if err != nil {
-			return err
-		}
-		defer src.Close()
-		// Destination
-		dst, err := os.Create("../files/" + file.Filename)
-		if err != nil {
-			return err
-		}
-		defer dst.Close()
-		// Copy
-		if _, err = io.Copy(dst, src); err != nil {
-			return err
-		}
-	}
-	return c.Redirect(http.StatusSeeOther, "/") // 303 code
-	//return c.Render(http.StatusOK, "home.html", nil) //fmt.Sprintf("<p>Uploaded successfully %d files with fields name=%s and email=%s.</p>",len(files), name, email))
 }
 
 // TODO store all session in dedicated file or database later
