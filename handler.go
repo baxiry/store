@@ -164,14 +164,17 @@ func uploadPage(c echo.Context) error {
 		fmt.Println("erro upload session is : ", err)
 	}
 	email := sess.Values["email"]
-
+	if email == nil {
+		// TODO flash here
+		return c.Redirect(http.StatusSeeOther, "/login") // 303 code
+	}
 	// c.Response().Status
 	return c.Render(200, "upload.html", userSession[email])
 }
 
 // TODO store all session in dedicated file or database later
 // becose when restart server not lose currents session clients.
-
+// TODO redirect to latest page after login
 /* Cookies
 
 func writeCookie(c echo.Context, email string) error {
