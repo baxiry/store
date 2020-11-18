@@ -4,6 +4,12 @@
    margin-top:20px; */                                    
    margin-left:0px;                                          
 }       
+
+.card:hover {
+    box-shadow: 0 2px 4px 0 #CFCFCF;/* rgba(0,0,0,0.2);*/
+
+}
+
 button {
     width:220px;
 }
@@ -42,7 +48,7 @@ nav a:hover {
 
 #acount:hover {
     background-color:#FFDEAD;
-    margin-left:720px;
+    margin-left:55%;
 }
 
 body {
@@ -95,3 +101,4 @@ footer{
     opacity: 1;
   }
 }
+

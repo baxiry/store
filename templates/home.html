@@ -4,8 +4,18 @@
 <body>
 <!-- header is head and navbar -->
 <div id="center">                                                        
+    <div id=catigory>
+        <ul>
+            <a href="/cars"><li>cars</li></a>
+            <a href="/animals"><li>animals</li></a>
+            <a href="/mobiles"><li>mobilia</li></a>
+            <a href="/motors"><li>motors</li></a>
+            <a href="computers"><li>computers</li></a>
+        </ul>
+
+    </div>
     {{ range .photo }} 
-    <a href="files/{{.}}"><img src="files/{{.}}"/></a>
+    <a href="files/{{.}}"><img src="files/{{.}}" class=card /></a>
     {{ end }}
     <!--<img src="a/imgs/nature.jpg"/>-->
 </div>
