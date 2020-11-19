@@ -19,7 +19,7 @@ func upload(c echo.Context) error {
 	fmt.Println("email of owner session", email)
 
 	title := c.FormValue("title")
-	//catigory := c.FormValue("catigory")
+	catigory := c.FormValue("catigory")
 	details := c.FormValue("description")
 	//p := c.FormValue("price")
 	price, _ := strconv.Atoi(c.FormValue("price"))
@@ -39,8 +39,9 @@ func upload(c echo.Context) error {
 		// TODO Rename pictures.
 	}
 
-	err = insertProduct(email.(string), title, details, picts, price)
+	err = insertProduct(email.(string), title, catigory, details, picts, price)
 	if err != nil {
+		fmt.Println()
 		fmt.Println("error in insert product", err)
 	}
 
