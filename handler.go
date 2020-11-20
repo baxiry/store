@@ -123,9 +123,10 @@ func home(c echo.Context) error {
 		Photonames = append(Photonames, name)
 	}
 
-	data := make(map[string]interface{}, 2)
+	data := make(map[string]interface{}, 3)
 	data["name"] = userSession[email]
 	data["photo"] = Photonames
+	// data["catigories"] = getCatigories() we are need getCatigories ?
 
 	return c.Render(http.StatusOK, "home.html", data) //, userSession[email]) //getUserSess(email))
 }
@@ -156,6 +157,7 @@ func getUser(c echo.Context) error {
 	// User ID from path `users/:id`
 	id := c.Param("id")
 	return c.Render(http.StatusOK, "user.html", id)
+
 }
 
 // upload photos

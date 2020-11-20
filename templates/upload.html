@@ -4,11 +4,17 @@
 <h1>Upload multiple files with fields</h1>
 
 <p>my email is : {{.}}</p>
-<form action="/upload" method="post" enctype="multipart/form-data">
-    title: <input type="text" name=title placeholder="title"><br>
-    catigory: <input type="text" name=catigory placeholder="catigory"><br>
-    Discription: <textarea name="description" onkeyup="return geoListing.getLength(event,this)" title="100 caractères" placeholder="ok"></textarea><br>
-    price: <input type="number" name=price placeholder="price"><br>
+<form action="/upload" method="post" enctype="multipart/form-data" id=center>
+    title: <input type="text" name=title placeholder="title"><br><br>
+    catigory:
+    <select name="catigory">
+        <option value="animal">animal</option>
+        <option value="mobile">mobile</option>
+        <option value="cars">cars</option>
+        <option value="food">food</option>
+    </select><br><br>
+    Discription: <textarea name="description" onkeyup="return geoListing.getLength(event,this)" title="100 caractères" placeholder="ok"></textarea><br><br>
+    price: <input type="number" name=price placeholder="price"><br><br>
     photos: <input type="file" name="files" multiple><br><br>
     <input type="submit" value="Submit">
 </form>

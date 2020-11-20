@@ -11,15 +11,6 @@ var (
 	err error
 )
 
-func setdb() *sql.DB {
-	db, err = sql.Open(
-		"mysql", "root:@tcp(127.0.0.1:3306)/?charset=utf8&parseTime=True&loc=Local")
-	if err != nil {
-		panic(err.Error())
-	}
-	fmt.Println("new db connection")
-	return db
-}
 func insertProduct(owner, title, catigory, details, picts string, price int) error {
 	insert, err := db.Query(
 		"INSERT INTO stores.products(owner, title, catigory, description, price, photos) VALUES ( ?, ?, ?, ?, ?, ?)",
@@ -58,4 +49,14 @@ func insertUser(user, pass, email, phon string) error {
 	// be careful deferring Queries if you are using transactions
 	defer insert.Close()
 	return nil
+}
+
+func setdb() *sql.DB {
+	db, err = sql.Open(
+		"mysql", "root:@tcp(127.0.0.1:3306)/?charset=utf8&parseTime=True&loc=Local")
+	if err != nil {
+		panic(err.Error())
+	}
+	fmt.Println("new db connection")
+	return db
 }
