@@ -70,13 +70,14 @@ func upload(c echo.Context) error {
 // this map for store and manage user session
 var userSession = map[interface{}]string{}
 
-func mysess(c echo.Context, email string) {
+func mysess(c echo.Context, name, email string) {
 	sess, _ := session.Get("session", c)
 	sess.Options = &sessions.Options{
 		Path:     "/",
-		MaxAge:   86400, // * 7,
-		HttpOnly: true,
+		MaxAge:   3600, // = 60s * 60 = 1h,
+		HttpOnly: true, // no websocket or any thing else
 	}
+	sess.Values["name"] = name
 	sess.Values["email"] = email
 	sess.Save(c.Request(), c.Response())
 }
@@ -88,7 +89,7 @@ func login(c echo.Context) error {
 
 	if pass == fpass && femail == email {
 		userSession[email] = name
-		mysess(c, email)
+		mysess(c, name, email)
 		return c.Redirect(http.StatusSeeOther, "/") // 303 code
 	}
 	return c.Render(200, "login.html", "Username or password is wrong")
@@ -109,7 +110,8 @@ func signup(c echo.Context) error {
 
 func home(c echo.Context) error {
 	sess, _ := session.Get("session", c)
-	email := sess.Values["email"]
+	//email := sess.Values["email"]
+	name := sess.Values["name"]
 
 	file, err := os.Open("../files")
 	if err != nil {
@@ -119,12 +121,12 @@ func home(c echo.Context) error {
 
 	Photonames := make([]string, 0)
 	list, _ := file.Readdirnames(0) // 0 to read all files and folders
-	for _, name := range list {
-		Photonames = append(Photonames, name)
+	for _, fileName := range list {
+		Photonames = append(Photonames, fileName)
 	}
 
 	data := make(map[string]interface{}, 3)
-	data["name"] = userSession[email]
+	data["name"] = name // this name form session instead mimory map store: userSession[email]
 	data["photo"] = Photonames
 	// data["catigories"] = getCatigories() we are need getCatigories ?
 
