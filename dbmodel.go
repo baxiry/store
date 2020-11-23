@@ -11,6 +11,23 @@ var (
 	err error
 )
 
+func getCatigories(catigory string) (items []string, err error) {
+	var photos string
+	res, err := db.Query(
+		"SELECT photos FROM stores.products WHERE catigory = ?", catigory)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Close() // TODO I need understand this close in mariadb
+
+	for res.Next() {
+		res.Scan(&photos)
+		items = append(items, photos)
+	}
+	fmt.Println(items)
+	return items, nil
+}
+
 func insertProduct(owner, title, catigory, details, picts string, price int) error {
 	insert, err := db.Query(
 		"INSERT INTO stores.products(owner, title, catigory, description, price, photos) VALUES ( ?, ?, ?, ?, ?, ?)",

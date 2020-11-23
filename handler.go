@@ -12,6 +12,21 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// e.GET("/users/:id", getUser)
+func getCatigory(c echo.Context) error {
+	// TODO whish is beter all data of roduct or jast photo ?
+	data := make(map[string]interface{})
+	sess, _ := session.Get("session", c)
+	data["name"] = sess.Values["name"]
+	// User ID from path `users/:id`
+	catigory := c.Param("catigory") // TODO home or catigory.html ?
+	data["photo"], err = getCatigories(catigory)
+	if err != nil {
+		fmt.Println("with gitCatigories: ", err)
+	}
+	return c.Render(http.StatusOK, "home.html", data)
+}
+
 func upload(c echo.Context) error {
 	// TODO: how upload this ?.  definde uploader by session
 	sess, _ := session.Get("session", c)
@@ -159,7 +174,6 @@ func getUser(c echo.Context) error {
 	// User ID from path `users/:id`
 	id := c.Param("id")
 	return c.Render(http.StatusOK, "user.html", id)
-
 }
 
 // upload photos

@@ -27,7 +27,8 @@ func main() {
 	e.GET("/stores", stores)
 	e.GET("/acount/:name", acount)
 	e.POST("/login", login)
-	e.GET("/:user", getUser)
+	// e.GET("/:user", getUser)
+	e.GET("/:catigory", getCatigory) //getUser)
 
 	e.GET("/upload", uploadPage)
 	e.POST("/upload", upload)
