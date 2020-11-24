@@ -23,6 +23,8 @@ func getCatigories(catigory string) (items []string, err error) {
 	for res.Next() {
 		res.Scan(&photos)
 		items = append(items, photos)
+		// TODO we need just avatar photo
+		fmt.Println(photos)
 	}
 	fmt.Println(items)
 	return items, nil
