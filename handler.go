@@ -50,6 +50,7 @@ func upload(c echo.Context) error {
 	for _, v := range files {
 		fmt.Println(v.Filename)
 		picts += v.Filename
+		picts += "];["
 		fmt.Println(picts)
 		// TODO Rename pictures.
 	}
