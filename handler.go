@@ -83,9 +83,6 @@ func upload(c echo.Context) error {
 	//return c.Render(http.StatusOK, "home.html", nil) //fmt.Sprintf("<p>Uploaded successfully %d files with fields name=%s and email=%s.</p>",len(files), name, email))
 }
 
-// this map for store and manage user session
-var userSession = map[interface{}]string{}
-
 func mysess(c echo.Context, name, email string) {
 	sess, _ := session.Get("session", c)
 	sess.Options = &sessions.Options{
@@ -104,7 +101,7 @@ func login(c echo.Context) error {
 	name, email, pass := getUsername(femail)
 
 	if pass == fpass && femail == email {
-		userSession[email] = name
+		//userSession[email] = name
 		mysess(c, name, email)
 		return c.Redirect(http.StatusSeeOther, "/") // 303 code
 	}
@@ -126,7 +123,6 @@ func signup(c echo.Context) error {
 
 func home(c echo.Context) error {
 	sess, _ := session.Get("session", c)
-	//email := sess.Values["email"]
 	name := sess.Values["name"]
 
 	file, err := os.Open("../files")
@@ -142,11 +138,10 @@ func home(c echo.Context) error {
 	}
 
 	data := make(map[string]interface{}, 3)
-	data["name"] = name // this name form session instead mimory map store: userSession[email]
+	data["name"] = name // from session or from memcach ?
 	data["photo"] = Photonames
-	// data["catigories"] = getCatigories() we are need getCatigories ?
 
-	return c.Render(http.StatusOK, "home.html", data) //, userSession[email]) //getUserSess(email))
+	return c.Render(http.StatusOK, "home.html", data)
 }
 
 func signPage(c echo.Context) error {
@@ -159,9 +154,9 @@ func loginPage(c echo.Context) error {
 
 func stores(c echo.Context) error {
 	sess, _ := session.Get("session", c)
-	email := sess.Values["email"]
+	name := sess.Values["name"]
 
-	return c.Render(200, "stores.html", userSession[email])
+	return c.Render(200, "stores.html", name)
 }
 
 func acount(c echo.Context) error {
@@ -189,7 +184,7 @@ func uploadPage(c echo.Context) error {
 		return c.Redirect(http.StatusSeeOther, "/login") // 303 code
 	}
 	// c.Response().Status
-	return c.Render(200, "upload.html", userSession[email])
+	return c.Render(200, "upload.html", email)
 }
 
 // TODO store all session in dedicated file or database later

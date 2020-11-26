@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"strings"
 )
 
 var (
@@ -11,7 +12,8 @@ var (
 	err error
 )
 
-func getCatigories(catigory string) (items []string, err error) {
+// getCatigories get all photo name of catigories.
+func getCatigories(catigory string) ([]string, error) {
 	var photos string
 	res, err := db.Query(
 		"SELECT photos FROM stores.products WHERE catigory = ?", catigory)
@@ -20,14 +22,16 @@ func getCatigories(catigory string) (items []string, err error) {
 	}
 	defer res.Close() // TODO I need understand this close in mariadb
 
+	items := make([]string, 0)
 	for res.Next() {
 		res.Scan(&photos)
-		items = append(items, photos)
+		list := strings.Split(photos, "];[")
+		// TODO split return 2 item in some casess, is this a bug ?
+
+		items = append(items, list...)
 		// TODO we need just avatar photo
-		fmt.Println(photos)
 	}
-	fmt.Println(items)
-	return items, nil
+	return filter(items), nil
 }
 
 func insertProduct(owner, title, catigory, details, picts string, price int) error {
@@ -78,4 +82,15 @@ func setdb() *sql.DB {
 	}
 	fmt.Println("new db connection")
 	return db
+}
+
+// some tools
+func filter(slc []string) []string {
+	res := make([]string, 0)
+	for _, v := range slc {
+		if v != "" {
+			res = append(res, v)
+		}
+	}
+	return res
 }
