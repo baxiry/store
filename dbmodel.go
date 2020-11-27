@@ -89,7 +89,7 @@ func filter(slc []string) []string {
 	res := make([]string, 0)
 	for _, v := range slc {
 		if v != "" {
-			res = append(res, v)
+			res = append(res, v) // TODO this need improve fo performence
 		}
 	}
 	return res
