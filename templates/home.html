@@ -3,21 +3,20 @@
    </nav>
 <body>
 <!-- header is head and navbar -->
-<div id="center">                                                        
     <div id=catigory>
-        <ul>
-            <a href="/cars"><li>cars</li></a>
-            <a href="/animal"><li>animals</li></a>
-            <a href="/mobile"><li>mobile</li></a>
-            <a href="/food"><li>food</li></a>
-            <a href="/motors"><li>motors</li></a>
-            <a href="computers"><li>computers</li></a>
-        </ul>
-
+            <a href="/cars">cars</a>
+            <a href="/animal">animals</a>
+            <a href="/mobile">mobile</a>
+            <a href="/food">food</a>
+            <a href="/motors">motors</a>
+            <a href="computers">computers</a>
     </div>
+<div id="center">                                                        
+    <div id=hi>
     {{ range .photo }} 
-    <a href="files/{{.}}"><img src="files/{{.}}" class=card /></a>
+        <a href="files/{{.}}"><img src="files/{{.}}" class=card /></a>
     {{ end }}
+    </div>
     <!--<img src="a/imgs/nature.jpg"/>-->
 </div>
 <!--<img src="data:image/png;base64, .... -->
@@ -34,6 +33,7 @@ img {
     border-color: grey;*/
 }
 .card {
+    // TODO
 }
 .card:hover {
     box-shadow: 5px 6px 4px 1px #CFCFCF;/* rgba(0,0,0,0.4);*/
