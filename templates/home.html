@@ -10,11 +10,15 @@
             <a href="/food">food</a>
             <a href="/motors">motors</a>
             <a href="computers">computers</a>
+            <a href="girls">girls</a>
     </div>
 <div id="center">                                                        
     <div id=hi>
-    {{ range .photo }} 
-        <a href="files/{{.}}"><img src="files/{{.}}" class=card /></a>
+    {{ range .products }} 
+    <h1>{{.Title}}</h1>
+    {{range .Photos}}
+    <a href="files/{{.}}"><img src="files/{{.}}" class=card /></a>
+    {{end}}
     {{ end }}
     </div>
     <!--<img src="a/imgs/nature.jpg"/>-->

@@ -12,26 +12,35 @@ var (
 	err error
 )
 
+type Product struct {
+	Photos []string
+	Title  string
+}
+
 // getCatigories get all photo name of catigories.
-func getCatigories(catigory string) ([]string, error) {
-	var photos string
+func getProductes(catigory string) ([]Product, error) {
+	var p Product
+	var picts string
 	res, err := db.Query(
-		"SELECT photos FROM stores.products WHERE catigory = ?", catigory)
+		"SELECT title, photos FROM stores.products WHERE catigory = ?", catigory)
 	if err != nil {
 		return nil, err
 	}
 	defer res.Close() // TODO I need understand this close in mariadb
 
-	items := make([]string, 0)
+	items := make([]Product, 0)
 	for res.Next() {
-		res.Scan(&photos)
-		list := strings.Split(photos, "];[")
+		res.Scan(&p.Title, &picts)
+		list := strings.Split(picts, "];[")
 		// TODO split return 2 item in some casess, is this a bug ?
 
-		items = append(items, list...)
+		p.Photos = filter(list)
+
+		items = append(items, p)
 		// TODO we need just avatar photo
+
 	}
-	return filter(items), nil
+	return items, nil
 }
 
 func insertProduct(owner, title, catigory, details, picts string, price int) error {

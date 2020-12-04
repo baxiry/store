@@ -20,10 +20,11 @@ func getCatigory(c echo.Context) error {
 	data["name"] = sess.Values["name"]
 	// User ID from path `users/:id`
 	catigory := c.Param("catigory") // TODO home or catigory.html ?
-	data["photo"], err = getCatigories(catigory)
+	data["products"], err = getProductes(catigory)
 	if err != nil {
 		fmt.Println("with gitCatigories: ", err)
 	}
+	fmt.Println("data is : ", data)
 	return c.Render(http.StatusOK, "home.html", data)
 }
 
