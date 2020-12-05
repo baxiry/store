@@ -15,6 +15,7 @@ var (
 type Product struct {
 	Photos []string
 	Title  string
+	Price  string
 }
 
 // getCatigories get all photo name of catigories.
@@ -22,7 +23,7 @@ func getProductes(catigory string) ([]Product, error) {
 	var p Product
 	var picts string
 	res, err := db.Query(
-		"SELECT title, photos FROM stores.products WHERE catigory = ?", catigory)
+		"SELECT title, photos, price FROM stores.products WHERE catigory = ?", catigory)
 	if err != nil {
 		return nil, err
 	}
@@ -30,7 +31,7 @@ func getProductes(catigory string) ([]Product, error) {
 
 	items := make([]Product, 0)
 	for res.Next() {
-		res.Scan(&p.Title, &picts)
+		res.Scan(&p.Title, &picts, &p.Price)
 		list := strings.Split(picts, "];[")
 		// TODO split return 2 item in some casess, is this a bug ?
 
