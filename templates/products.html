@@ -14,8 +14,12 @@
     </div>
 <div id="center">                                                        
     <div id=hi>
-    {{ range .photos }} 
+    {{ range .products }} 
+    <h1>{{.Title}}</h1>
+    <h3>{{.Price}}</h3>
+    {{range .Photos}}
     <a href="files/{{.}}"><img src="files/{{.}}" class=card /></a>
+    {{end}}
     {{ end }}
     </div>
     <!--<img src="a/imgs/nature.jpg"/>-->

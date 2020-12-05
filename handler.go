@@ -25,7 +25,7 @@ func getCatigory(c echo.Context) error {
 		fmt.Println("with gitCatigories: ", err)
 	}
 	fmt.Println("data is : ", data)
-	return c.Render(http.StatusOK, "home.html", data)
+	return c.Render(http.StatusOK, "products.html", data)
 }
 
 func upload(c echo.Context) error {
@@ -140,7 +140,7 @@ func home(c echo.Context) error {
 
 	data := make(map[string]interface{}, 3)
 	data["name"] = name // from session or from memcach ?
-	data["photo"] = Photonames
+	data["photos"] = Photonames
 
 	return c.Render(http.StatusOK, "home.html", data)
 }
