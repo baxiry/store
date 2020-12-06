@@ -15,7 +15,7 @@
 <div id="center">                                                        
     <div id=hi>
     {{ range .photos }} 
-    <a href="files/{{.}}"><img src="files/{{.}}" class=card /></a>
+    <a href="/fs/{{.}}"><img src="/fs/{{.}}" class=card /></a>
     {{ end }}
     </div>
     <!--<img src="a/imgs/nature.jpg"/>-->
@@ -24,7 +24,7 @@
 
 {{template "footer.html"}}
 </body>
-<script src=a/app.js></script>
+<script src=/a/app.js></script>
 <style>
 img {
     height:140px;

@@ -13,9 +13,27 @@ var (
 )
 
 type Product struct {
+	Id     int
 	Photos []string
 	Title  string
 	Price  string
+}
+
+func getProduct(id int) (Product, error) {
+	var p Product
+	var picts string
+	err := db.QueryRow(
+		"SELECT title, photos, price FROM stores.products WHERE id = ?",
+		id).Scan(&p.Title, &picts, &p.Price)
+	if err != nil {
+		return p, err
+	}
+
+	list := strings.Split(picts, "];[")
+	// TODO split return 2 item in some casess, is this a bug ?
+	p.Photos = filter(list)
+	fmt.Println("product form db : ", p)
+	return p, nil
 }
 
 // getCatigories get all photo name of catigories.
@@ -23,7 +41,7 @@ func getProductes(catigory string) ([]Product, error) {
 	var p Product
 	var picts string
 	res, err := db.Query(
-		"SELECT title, photos, price FROM stores.products WHERE catigory = ?", catigory)
+		"SELECT id, title, photos, price FROM stores.products WHERE catigory = ?", catigory)
 	if err != nil {
 		return nil, err
 	}
@@ -31,15 +49,12 @@ func getProductes(catigory string) ([]Product, error) {
 
 	items := make([]Product, 0)
 	for res.Next() {
-		res.Scan(&p.Title, &picts, &p.Price)
+		res.Scan(&p.Id, &p.Title, &picts, &p.Price)
 		list := strings.Split(picts, "];[")
 		// TODO split return 2 item in some casess, is this a bug ?
-
 		p.Photos = filter(list)
-
 		items = append(items, p)
 		// TODO we need just avatar photo
-
 	}
 	return items, nil
 }
@@ -48,7 +63,6 @@ func insertProduct(owner, title, catigory, details, picts string, price int) err
 	insert, err := db.Query(
 		"INSERT INTO stores.products(owner, title, catigory, description, price, photos) VALUES ( ?, ?, ?, ?, ?, ?)",
 		owner, title, catigory, details, price, picts)
-
 	// if there is an error inserting, handle it
 	if err != nil {
 		return err

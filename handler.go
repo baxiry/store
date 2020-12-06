@@ -12,8 +12,28 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+func getProd(c echo.Context) error {
+	// TODO whish is beter all data of roduct or jast photo ?
+	data := make(map[string]interface{})
+	sess, _ := session.Get("session", c)
+	data["name"] = sess.Values["name"]
+	// User ID from path `users/:id`
+	id := c.Param("id") // TODO home or catigory.html ?
+	productId, _ := strconv.Atoi(id)
+
+	data["product"], err = getProduct(productId)
+	if err != nil {
+		fmt.Println("with gitCatigories: ", err)
+	}
+	//for i, product := range data["products"].([]Product) {
+	fmt.Println("product form handle : ", data["product"])
+	//	fmt.Println(i, "product is : ", product.Id)
+	//}
+	return c.Render(http.StatusOK, "product.html", data)
+}
+
 // e.GET("/users/:id", getUser)
-func getCatigory(c echo.Context) error {
+func getProds(c echo.Context) error {
 	// TODO whish is beter all data of roduct or jast photo ?
 	data := make(map[string]interface{})
 	sess, _ := session.Get("session", c)
@@ -24,7 +44,10 @@ func getCatigory(c echo.Context) error {
 	if err != nil {
 		fmt.Println("with gitCatigories: ", err)
 	}
-	fmt.Println("data is : ", data)
+	//for i, product := range data["products"].([]Product) {
+	//	fmt.Println(i, "product is : ", product.Photos[0])
+	//	fmt.Println(i, "product is : ", product.Id)
+	//}
 	return c.Render(http.StatusOK, "products.html", data)
 }
 

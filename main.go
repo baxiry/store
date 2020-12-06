@@ -15,10 +15,14 @@ func main() {
 
 	e.Renderer = templ()
 
-	e.Static("/a", "assets")
-	e.Static("acount/a", "assets")
-	e.Static("acount/files", "../files")
-	e.Static("files", "../files")
+	e.Static("/a", "assets") // ?
+	//e.Static("/acount/a", "assets") // ?
+	//e.Static("/:catigory/:id", "assets") // ?
+
+	e.Static("/acount/files", "../files")  // ?
+	e.Static("/:catigory/:id", "../files") // ?
+	e.Static("/fs", "../files")            // ?
+	// alse /fs or just fs withons slash ?
 
 	e.GET("/", home)
 	e.GET("/sign", signPage)
@@ -28,7 +32,8 @@ func main() {
 	e.GET("/acount/:name", acount)
 	e.POST("/login", login)
 	// e.GET("/:user", getUser)
-	e.GET("/:catigory", getCatigory) //getUser)
+	e.GET("/:catigory", getProds) //getUser)
+	e.GET("/:catigory/:id", getProd)
 
 	e.GET("/upload", uploadPage)
 	e.POST("/upload", upload)
