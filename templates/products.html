@@ -9,18 +9,20 @@
     <a href="/mobile">mobile</a>
     <a href="/food">food</a>
     <a href="/motors">motors</a>
-    <a href="computers">computers</a>
-    <a href="girls">girls</a>
+    <a href="/computers">computers</a>
+    <a href="/girls">girls</a>
 </div>
 <div id="center">                                                        
     <div id=hi>
     {{ range .products }} 
+
+    <a href="{{ .Id}}">
     <div class=card >
     <h1>{{.Title}}</h1>
     <h3>{{.Price}}</h3>
     <h3>{{.Id}}</h3>
-    <a href="fs/{{index .Photos 0}}"><img src="fs/{{index .Photos 0}}" /></a>
-    </div>
+    <a href="/fs/{{index .Photos 0}}"><img src="/fs/{{index .Photos 0}}" /></a>
+    </div></a>
     {{ end }}
     </div>
     <!--<img src="a/imgs/nature.jpg"/>-->

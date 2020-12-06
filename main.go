@@ -16,13 +16,8 @@ func main() {
 	e.Renderer = templ()
 
 	e.Static("/a", "assets") // ?
-	//e.Static("/acount/a", "assets") // ?
-	//e.Static("/:catigory/:id", "assets") // ?
 
-	e.Static("/acount/files", "../files")  // ?
-	e.Static("/:catigory/:id", "../files") // ?
-	e.Static("/fs", "../files")            // ?
-	// alse /fs or just fs withons slash ?
+	e.Static("/fs", "../files") // ?
 
 	e.GET("/", home)
 	e.GET("/sign", signPage)
