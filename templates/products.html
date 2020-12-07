@@ -16,16 +16,16 @@
     <div id=hi>
     {{ range .products }} 
 
-    <a href="{{ .Id}}">
+    <a href="product/{{ .Id}}"> <!-- TODO fix this router bug -->
     <div class=card >
+        <p>TODO fix this router bug </p>
     <h1>{{.Title}}</h1>
     <h3>{{.Price}}</h3>
-    <h3>{{.Id}}</h3>
-    <a href="/fs/{{index .Photos 0}}"><img src="/fs/{{index .Photos 0}}" /></a>
+    <h5>{{.Id}}</h5>
+    <a href="/fs/{{.Photo}}"><img src="/fs/{{.Photo }}" /></a>
     </div></a>
     {{ end }}
     </div>
-    <!--<img src="a/imgs/nature.jpg"/>-->
 </div>
 <!--<img src="data:image/png;base64, .... -->
 
@@ -45,8 +45,9 @@ img {
     min-height:500px; /* TODO change this to % */
 }
 .card {
-        margin: 12px;
+    margin: 12px;
     background-color: #00FFCC;
+    padding:10px;
 
     /*border: solid;
     border-top-width: 1px;
@@ -59,7 +60,8 @@ img {
     */
 }
 .card:hover {
-        box-shadow: 3px 5px 10px 4px #CFCFCF;
+    /*box-shadow: 3px 5px 10px 4px #CFCFCF;*/
+    box-shadow: 0px 0px 4px 4px #CFCFCF;/* rgba(0,0,0,0.4);*/
 }
 </style>
 </html>

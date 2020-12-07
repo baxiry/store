@@ -14,6 +14,7 @@ var (
 
 type Product struct {
 	Id     int
+	Photo  string
 	Photos []string
 	Title  string
 	Price  string
@@ -52,7 +53,7 @@ func getProductes(catigory string) ([]Product, error) {
 		res.Scan(&p.Id, &p.Title, &picts, &p.Price)
 		list := strings.Split(picts, "];[")
 		// TODO split return 2 item in some casess, is this a bug ?
-		p.Photos = filter(list)
+		p.Photo = list[0]
 		items = append(items, p)
 		// TODO we need just avatar photo
 	}

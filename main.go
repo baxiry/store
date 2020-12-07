@@ -15,9 +15,9 @@ func main() {
 
 	e.Renderer = templ()
 
-	e.Static("/a", "assets") // ?
+	e.Static("/a", "assets")
 
-	e.Static("/fs", "../files") // ?
+	e.Static("/fs", "../files")
 
 	e.GET("/", home)
 	e.GET("/sign", signPage)
