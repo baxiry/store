@@ -15,8 +15,9 @@
 <div id="center">                                                        
     <div id=hi>
     <div class=card >
-    <h1>{{.product.Title}}</h1>
-    <h3>{{.product.Price}}</h3>
+    <h3>{{.product.Title}}</h3>
+    <p><b>Details:</b> {{.product.Description}} </p>
+    <p><b>Price:</b>   {{.product.Price}}</p>
     {{ range .product.Photos }}
     <a href="/fs/{{.}}"><img src="/fs/{{.}}" /></a>
     <!-- this file is renderd from cach ??? -->
