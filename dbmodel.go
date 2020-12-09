@@ -3,8 +3,9 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	_ "github.com/go-sql-driver/mysql"
 	"strings"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 var (
@@ -101,7 +102,7 @@ func insertUser(user, pass, email, phon string) error {
 
 func setdb() *sql.DB {
 	db, err = sql.Open(
-		"mysql", "root:@tcp(127.0.0.1:3306)/?charset=utf8&parseTime=True&loc=Local")
+		"mysql", "root:123456@tcp(127.0.0.1:3306)/?charset=utf8&parseTime=True&loc=Local")
 	fmt.Println("new db connection")
 	fmt.Println(err)
 	// TODO report this error.

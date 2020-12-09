@@ -7,6 +7,8 @@ CREATE TABLE users (
     linkavatar varchar(255),
     primary key (id)
 );
+CREATE TABLE users ( id INT NOT NULL AUTO_INCREMENT, username varchar(50), password varchar(50), email varchar(50), phon varchar(15), linkavatar varchar(70), primary key (id));
+//
 
 create table tutorials_tbl( 
 	usreid INT NOT NULL AUTO_INCREMENT,
