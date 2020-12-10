@@ -2,25 +2,26 @@
 </nav>
 <body>
 <h1>Upload multiple files with fields</h1>
-
-<p>my email is : {{.}}</p>
-<form action="/upload" method="post" enctype="multipart/form-data" id=center>
-    title: <input type="text" name=title placeholder="title"><br><br>
-    catigory:
-    <select name="catigory">
-        <option value="computer">computer</option>
-        <option value="mobile">mobile</option>
-        <option value="animal">animal</option>
-        <option value="cars">cars</option>
-        <option value="food">food</option>
-        <option value="girls">girls</option>
-    </select><br><br>
-    Ditails: <textarea name="description" onkeyup="this.value.length == 10 ? console.log('stop') : null;"
-        title="write all details" placeholder="description"></textarea><br><br>
-    price: <input type="number" name=price placeholder="price"><br><br>
-    photos: <input type="file" name="files" multiple><br><br>
-    <input type="submit" value="Submit">
-</form>
+<p>the owner:  {{.}}</p>
+<div class=senter>
+    <form action="/upload" method="post" enctype="multipart/form-data" id=center>
+        title: <input type="text" name=title placeholder="title"><br><br>
+        catigory:
+        <select name="catigory">
+            <option value="computer">computer</option>
+            <option value="mobile">mobile</option>
+            <option value="motors">motors</option>
+            <option value="animal">animal</option>
+            <option value="cars">cars</option>
+            <option value="food">food</option>
+            <option value="girls">girls</option>
+        </select>
+        Ditails: <textarea name="description" onkeyup="this.value.length == 10 ? console.log('stop') : null;"
+            title="write all details" placeholder="description"></textarea><br><br>
+        price: <input type="number" name=price placeholder="price"><br><br>
+        photos: <input type="file" name="files" multiple><br><br>
+        <input type="submit" value="Submit">
+    </form>
+</div>
 </body>
 </html>
-

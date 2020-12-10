@@ -3,7 +3,7 @@
    </nav>
 <body>
 <!-- header is head and navbar -->
-<div id=catigory>
+<div class=catigories>
     <a href="/cars">cars</a>
     <a href="/animal">animals</a>
     <a href="/mobile">mobile</a>
@@ -12,16 +12,14 @@
     <a href="computers">computers</a>
     <a href="girls">girls</a>
 </div>
-<div id="center">                                                        
-    <div >
+
+<div class="center">                                                        
     {{ range .photos }} 
     <a href="/fs/{{.}}"><img src="/fs/{{.}}" class=card /></a>
     {{ end }}
-    </div>
 </div>
 <!--<img src="data:image/png;base64, .... -->
-
-{{template "footer.html"}}
+<div class=footer> footer  copyryght 2020 </div>
 </body>
 <script src=/a/app.js></script>
 <style>

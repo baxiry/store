@@ -1,12 +1,45 @@
 * {    
-   /* padding:0;  
-   padding-top:20px;  
-   margin-top:20px; */                                    
-   margin-left:0px;                                          
-}       
+   /* padding:0;*/                                    
+   margin:0px;                                          
+}
 
-button {
-    width:220px;
+.catigories {
+    //background-color:#8AC007;
+    padding:5px;
+    margin-top:6%;
+    margin-right:10%;
+    margin-left:10%;
+}
+
+.center {
+    //background-color:coral;
+    min-height:500px; /* TODO change this to % */
+    margin-top:2%;
+    margin-right:10%;
+    margin-left:10%;
+}
+
+img {
+    height:140px;
+    width:210px;
+}
+
+.card {
+    margin: 12px;
+    background-color: #00FFCC;
+}
+.card:hover {
+        box-shadow: 3px 5px 10px 4px #CFCFCF;
+}
+
+.footer{
+    background-color: grey;//coral;//#8AC007;
+    padding: 2%;
+    position: absolute //fixed;
+}
+
+.btn {
+    width:100%;
 }
 
 nav {
@@ -32,7 +65,7 @@ a {
 }
 
 nav > a {
-    padding-left:10px;
+    //padding-left:10px;
 }
 
 nav a:hover {
@@ -47,25 +80,14 @@ nav a:hover {
 
 #acount:hover {
     background-color:#FFDEAD;
-    margin-left:55%;
 }
 
 body {
-    /*background-color: #F8F8F8;*/
-    margin-top:50px;
+    scrollbar-width: none;
 }
 
 span {
     background-color: #F29D8A;
-}
-
-#center {
-    /*padding:150px;*/
-    padding-bottom: 0px;
-    padding-top:100px;
-    padding-top:5%;
-    margin-right:10%;
-    margin-left:10%;
 }
 
 #fadein {
@@ -74,18 +96,6 @@ span {
   	-webkit-animation-delay: 500ms;
   	animation-delay: 500ms;
 }
-.footer{
-    background-color: grey;    
-    padding: 10px;
-    margin-right:-8px;
-    margin-bottom:-8px;
-    /*
-    position: absolute;
-    width: 100%;
-    */
-    /*transform: translate(-50%, -50%)*/
-}
-
 /* fadeIn animation */
 @-webkit-keyframes fadeIn {
   0% {

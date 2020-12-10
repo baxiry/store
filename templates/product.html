@@ -1,9 +1,10 @@
-{{template "header.html"}}
-<a id="acount" href="/{{.name}}">{{.name}}</a>
-   </nav>
+    {{template "header.html"}}
+    <a id="acount" href="/{{.name}}">{{.name}}</a>
+</nav>
+
 <body>
-<!-- header is head and navbar -->
-<div id=catigory>
+
+<div class=catigories>
     <a href="/cars">cars</a>
     <a href="/animal">animals</a>
     <a href="/mobile">mobile</a>
@@ -12,53 +13,19 @@
     <a href="/computers">computers</a>
     <a href="/girls">girls</a>
 </div>
-<div id="center">                                                        
-    <div id=hi>
+
+<div class="center">                                                        
     <div class=card >
-    <h3>{{.product.Title}}</h3>
-    <p><b>Details:</b> {{.product.Description}} </p>
-    <p><b>Price:</b>   {{.product.Price}}</p>
-    {{ range .product.Photos }}
-    <a href="/fs/{{.}}"><img src="/fs/{{.}}" /></a>
-    <!-- this file is renderd from cach ??? -->
-    {{end}}
+        <h3>{{.product.Title}}</h3>
+        <p><b>Details:</b> {{.product.Description}} </p>
+        <p><b>Price:</b>   {{.product.Price}}</p>
+        {{ range .product.Photos }}
+            <a href="/fs/{{.}}"><img src="/fs/{{.}}" /></a>
+        {{end}}
     </div>
-    </div>
-    <!--<img src="a/imgs/nature.jpg"/>-->
 </div>
-<!--<img src="data:image/png;base64, .... -->
 
 {{template "footer.html"}}
+
 </body>
-<script src=/a/app.js></script>
-<style>
-img {
-    height:140px;
-    width:210px;
-    //padding:10px;
-    /*border: 10px;
-    border-color: grey;*/
-}
-
-#hi {
-    min-height:500px; /* TODO change this to % */
-}
-.card {
-        margin: 12px;
-    background-color: #00FFCC;
-
-    /*border: solid;
-    border-top-width: 1px;
-    border-right-width: 1px;
-    border-bottom-width: 1px;
-    border-left-width: 1px;
-    // height:200px;
-    // width:300px;
-    //padding:10px;
-    */
-}
-.card:hover {
-        box-shadow: 3px 5px 10px 4px #CFCFCF;
-}
-</style>
 </html>
