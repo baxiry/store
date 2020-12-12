@@ -4,7 +4,7 @@
 }
 
 .catigories {
-    //background-color:#8AC007;
+    /*background-color:#8AC007;*/
     padding:5px;
     margin-top:6%;
     margin-right:10%;
@@ -12,7 +12,7 @@
 }
 
 .center {
-    //background-color:coral;
+    /*background-color:coral;*/
     min-height:500px; /* TODO change this to % */
     margin-top:2%;
     margin-right:10%;
@@ -22,7 +22,7 @@
 img {
     height:140px;
     width:210px;
-    //background-color:#CFCFCF;
+    /*background-color:#CFCFCF;*/
 }
 
 .card {
@@ -34,9 +34,9 @@ img {
 }
 
 .footer{
-    background-color: grey;//coral;//#8AC007;
+    background-color: grey;/*coral; #8AC007;*/
     padding: 2%;
-    position: absolute //fixed;
+    position: absolute;/*fixed;*/
 }
 
 .btn {
@@ -66,7 +66,7 @@ a {
 }
 
 nav > a {
-    //padding-left:10px;
+    /*padding-left:10px;*/
 }
 
 nav a:hover {
