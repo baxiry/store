@@ -111,7 +111,7 @@ func mysess(c echo.Context, name, email string) {
 	sess, _ := session.Get("session", c)
 	sess.Options = &sessions.Options{
 		Path:     "/",
-		MaxAge:   3600, // = 60s * 60 = 1h,
+		MaxAge:   30,   // = 60s * 60 = 1h,
 		HttpOnly: true, // no websocket or any thing else
 	}
 	sess.Values["name"] = name
@@ -128,6 +128,7 @@ func login(c echo.Context) error {
 		//userSession[email] = name
 		mysess(c, name, email)
 		return c.Redirect(http.StatusSeeOther, "/") // 303 code
+		// TODO redirect to latest page
 	}
 	return c.Render(200, "login.html", "Username or password is wrong")
 }
@@ -184,8 +185,15 @@ func stores(c echo.Context) error {
 }
 
 func acount(c echo.Context) error {
-	name := c.Param("name")
-	fmt.Println("param is : ", name)
+	//name := c.Param("name")
+	//fmt.Println("param is : ", name)
+	sess, _ := session.Get("session", c)
+	name := sess.Values["name"]
+	if name == nil {
+		// TODO redirect to acount page
+		//return c.Render(200, "loginPage.html", "from acount")
+		return c.Redirect(http.StatusSeeOther, "/login") // 303 code
+	}
 	return c.Render(200, "acount.html", name) //[]string{name, "my acount"})
 }
 

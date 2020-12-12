@@ -22,11 +22,12 @@
 img {
     height:140px;
     width:210px;
+    //background-color:#CFCFCF;
 }
 
 .card {
     margin: 12px;
-    background-color: #00FFCC;
+    background-color:#00FFCC;
 }
 .card:hover {
         box-shadow: 3px 5px 10px 4px #CFCFCF;

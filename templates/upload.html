@@ -1,10 +1,11 @@
 {{template "header.html"}}
+
 </nav>
 <body>
 <h1>Upload multiple files with fields</h1>
+<div class=center>
 <p>the owner:  {{.}}</p>
-<div class=senter>
-    <form action="/upload" method="post" enctype="multipart/form-data" id=center>
+    <form action="/upload" method="post" enctype="multipart/form-data">
         title: <input type="text" name=title placeholder="title"><br><br>
         catigory:
         <select name="catigory">
@@ -16,8 +17,8 @@
             <option value="food">food</option>
             <option value="girls">girls</option>
         </select>
-        Ditails: <textarea name="description" onkeyup="this.value.length == 10 ? console.log('stop') : null;"
-            title="write all details" placeholder="description"></textarea><br><br>
+        Ditails: <textarea name="description" onkeyup="this.value.length == 200 ? alert('stop') : null;"
+                           title="write all details" placeholder="description"></textarea><br><br>
         price: <input type="number" name=price placeholder="price"><br><br>
         photos: <input type="file" name="files" multiple><br><br>
         <input type="submit" value="Submit">
