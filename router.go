@@ -1,8 +1,8 @@
 package main
 
 import (
-	"html/template"
 	"io"
+	"text/template"
 
 	"github.com/labstack/echo/v4"
 )
