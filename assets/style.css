@@ -1,6 +1,5 @@
 * {    
-   /* padding:0;*/                                    
-   margin:0px;                                          
+   margin:0px;                                    
 }
 
 .catigories {
@@ -18,25 +17,35 @@
     margin-right:10%;
     margin-left:10%;
 }
-
 img {
-    height:140px;
-    width:210px;
-    /*background-color:#CFCFCF;*/
+    height:auto;
+    width:100%;
+    padding:auto;
+    border-radius: 8px;
+}
+.card {
+    height:200px;
+    width:270px;
+    padding:auto;
+    margin:10px;
+    // TODO
+}
+.card:hover {
+    /*box-shadow: 0px 0px 4px 4px #CFCFCF;/* rgba(0,0,0,0.4);*/
 }
 
-.card {
-    margin: 12px;
-    background-color:#00FFCC;
-}
 .card:hover {
         box-shadow: 3px 5px 10px 4px #CFCFCF;
 }
 
 .footer{
+    text-align: center;
+    /*text-color: white;*/
+    width:96%;
     background-color: grey;/*coral; #8AC007;*/
     padding: 2%;
     position: absolute;/*fixed;*/
+
 }
 
 .btn {
@@ -118,21 +127,48 @@ span {
   }
 }
 
-.responsive {
-  padding: 0 6px;
-  float: left;
-  width: 24.99999%;
-}
 
-@media only screen and (max-width: 700px){
-  .responsive {
-    width: 49.99999%;
-    margin: 6px 0;
-  }
-}
+/*---------------------------------------*/
+/* For desktop: */
+.col-1 {width: 8.33%;}
+.col-2 {width: 16.66%;}
+.col-3 {width: 25%;}
+.col-4 {width: 33.33%;}
+.col-5 {width: 41.66%;}
+.col-6 {width: 50%;}
+.col-7 {width: 58.33%;}
+.col-8 {width: 66.66%;}
+.col-9 {width: 75%;}
+.col-10 {width: 83.33%;}
+.col-11 {width: 91.66%;}
+.col-12 {width: 100%;}
 
-@media only screen and (max-width: 500px){
-  .responsive {
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  [class*="col-"] {
     width: 100%;
   }
 }
+
+/*---------------------*/
+/* For desktop: */
+.col-1 {width: 8.33%;}
+.col-2 {width: 16.66%;}
+.col-3 {width: 25%;}
+.col-4 {width: 33.33%;}
+.col-5 {width: 41.66%;}
+.col-6 {width: 50%;}
+.col-7 {width: 58.33%;}
+.col-8 {width: 66.66%;}
+.col-9 {width: 75%;}
+.col-10 {width: 83.33%;}
+.col-11 {width: 91.66%;}
+.col-12 {width: 100%;}
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  [class*="col-"] {
+    width: 100%;
+  }
+}
+/*-------------------------*/
