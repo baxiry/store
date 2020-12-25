@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/gorilla/sessions"
@@ -148,6 +149,7 @@ func signup(c echo.Context) error {
 func home(c echo.Context) error {
 	sess, _ := session.Get("session", c)
 	name := sess.Values["name"]
+	fmt.Println("name is : ", name)
 
 	file, err := os.Open("../files")
 	if err != nil {
