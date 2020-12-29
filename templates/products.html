@@ -1,5 +1,12 @@
 {{template "header.html"}}
-<a id="acount" href="/{{.name}}">{{.name}}</a>
+   <div class=rt>
+   {{if .name }} 
+   <a href="/{{.name}}" class=acount>{{.name}}</a>
+   {{- else}}
+   <a href="/login">Login</a>
+   <a href="/sign">Signup</a>
+   {{- end}}
+   </div>
    </nav>
 <body>
 <!-- header is head and navbar -->

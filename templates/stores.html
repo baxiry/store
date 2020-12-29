@@ -1,4 +1,12 @@
 {{template "header.html"}}
+   <div class=rt>
+   {{if .name }} 
+   <a href="/{{.name}}" class=acount>{{.name}}</a>
+   {{- else}}
+   <a href="/login">Login</a>
+   <a href="/sign">Signup</a>
+   {{- end}}
+   </div>
 </nav>
 <body>
 <h1>{{.}}</h1>
@@ -6,9 +14,8 @@
 <script src="/a/app.js"></script>
 </body>
 <style>
-span {
-    //position:right;
-    //font-size:1.3em;
+h1 {
+    margin:3%;
 }
 </style>
 </html>
