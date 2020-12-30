@@ -3,6 +3,7 @@
 }
 .rt {
     float: right;
+    padding-right:1%;
 }
 nav {
 /*    overflow: hidden;*/
