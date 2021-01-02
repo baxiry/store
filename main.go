@@ -7,31 +7,31 @@ import (
 )
 
 func main() {
-	db := setdb()
-	defer db.Close()
 
 	e := echo.New()
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte("secret"))))
 
-	e.Renderer = templ()
 
-	e.Static("/a", "assets")
+    e.Renderer = templ()
 
+    e.Static("/a", "assets")
 	e.Static("/fs", "../files")
-
 	e.GET("/", home)
 	e.GET("/sign", signPage)
 	e.POST("/sign", signup)
 	e.GET("/login", loginPage)
+	e.POST("/login", login)
 	e.GET("/stores", stores)
 	e.GET("/acount/:name", acount)
-	e.POST("/login", login)
-	// e.GET("/:user", getUser)
-	e.GET("/:catigory", getProds) //getUser)
+	e.GET("/:catigory", getProds)
 	e.GET("/:catigory/:id", getProd)
-
 	e.GET("/upload", uploadPage)
 	e.POST("/upload", upload)
+	// e.GET("/:user", getUser)
 
-	e.Logger.Fatal(e.Start(":8080"))
+
+    db := setdb()
+	defer db.Close()
+
+    e.Logger.Fatal(e.Start(":8080"))
 }

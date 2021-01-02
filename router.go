@@ -22,3 +22,4 @@ func templ() *Template {
         "tmpl/upload.html","tmpl/product.html","tmpl/products.html","tmpl/part/header.html","tmpl/part/footer.html"}
     return &Template{templates: template.Must(template.ParseFiles(files...))}
 }
+

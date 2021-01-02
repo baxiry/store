@@ -60,7 +60,6 @@ func upload(c echo.Context) error {
 	title := c.FormValue("title")
 	catigory := c.FormValue("catigory")
 	details := c.FormValue("description")
-	//p := c.FormValue("price")
 	price, _ := strconv.Atoi(c.FormValue("price"))
 
 	// Read files, Multipart form
@@ -140,7 +139,7 @@ func signup(c echo.Context) error {
 	phon := c.FormValue("phon")
 	err := insertUser(name, pass, email, phon)
 	if err != nil {
-		fmt.Println(err)
+        //fmt.Println(err)
 		return c.Render(200, "sign.html", "wrrone")
 	}
 	return c.Redirect(http.StatusSeeOther, "/login") // 303 code
@@ -149,7 +148,7 @@ func signup(c echo.Context) error {
 func home(c echo.Context) error {
 	sess, _ := session.Get("session", c)
 	name := sess.Values["name"]
-	fmt.Println("name is : ", name)
+	//fmt.Println("name is : ", name)
 
 	file, err := os.Open("../files")
 	if err != nil {

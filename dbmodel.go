@@ -104,12 +104,13 @@ func insertUser(user, pass, email, phon string) error {
 func setdb() *sql.DB {
 	db, err = sql.Open(
 		"mysql", "root:123456@tcp(127.0.0.1:3306)/?charset=utf8&parseTime=True&loc=Local")
-	fmt.Println("new db connection")
-	fmt.Println(err)
-	// TODO report this error.
-	// wehen db is stoped no error is return.
-	// we expecte errore no database is runing
-
+    if err != nil {
+        fmt.Println(err)
+        // TODO report this error.
+        // wehen db is stoped no error is return.
+        // we expecte errore no database is runing
+    }
+    fmt.Println("new db connection")
 	return db
 }
 
