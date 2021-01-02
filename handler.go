@@ -103,8 +103,8 @@ func upload(c echo.Context) error {
 			return err
 		}
 	}
+    // TODO redirect to home or to acount ??
 	return c.Redirect(http.StatusSeeOther, "/") // 303 code
-	//return c.Render(http.StatusOK, "home.html", nil) //fmt.Sprintf("<p>Uploaded successfully %d files with fields name=%s and email=%s.</p>",len(files), name, email))
 }
 
 func mysess(c echo.Context, name, email string) {
@@ -167,7 +167,7 @@ func home(c echo.Context) error {
 	data["name"] = name // from session or from memcach ?
 	data["photos"] = Photonames
 
-	return c.Render(http.StatusOK, "home.html", data)
+    return c.Render(http.StatusOK, "home.html", data)
 }
 
 func signPage(c echo.Context) error {
@@ -191,11 +191,9 @@ func acount(c echo.Context) error {
 	sess, _ := session.Get("session", c)
 	name := sess.Values["name"]
 	if name == nil {
-		// TODO redirect to acount page
-		//return c.Render(200, "loginPage.html", "from acount")
 		return c.Redirect(http.StatusSeeOther, "/login") // 303 code
 	}
-	return c.Render(200, "acount.html", name) //[]string{name, "my acount"})
+	return c.Render(200, "acount.html", name)
 }
 
 // e.GET("/users/:id", getUser)
