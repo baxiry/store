@@ -110,7 +110,7 @@ func mysess(c echo.Context, name, email string) {
 	sess, _ := session.Get("session", c)
 	sess.Options = &sessions.Options{
 		Path:     "/",
-		MaxAge:   30,   // = 60s * 60 = 1h,
+        MaxAge:   3000,   // = 60s * 60 = 1h,
 		HttpOnly: true, // no websocket or any thing else
 	}
 	sess.Values["name"] = name
@@ -174,25 +174,31 @@ func signPage(c echo.Context) error {
 }
 
 func loginPage(c echo.Context) error {
+
 	return c.Render(200, "login.html", "hello")
 }
 
 func stores(c echo.Context) error {
 	sess, _ := session.Get("session", c)
-	name := sess.Values["name"]
 
-	return c.Render(200, "stores.html", name)
+    data := make(map[string]interface{}, 3)
+	name := sess.Values["name"]
+	data["name"] = name // from session or from memcach ?
+
+    return c.Render(200, "stores.html", data)
 }
 
 func acount(c echo.Context) error {
 	//name := c.Param("name")
 	//fmt.Println("param is : ", name)
 	sess, _ := session.Get("session", c)
-	name := sess.Values["name"]
-	if name == nil {
+    data := make(map[string]interface{}, 3)
+    data["name"] = sess.Values["name"]
+
+    if data["name"] == nil {
 		return c.Redirect(http.StatusSeeOther, "/login") // 303 code
 	}
-	return c.Render(200, "acount.html", name)
+    return c.Render(200, "acount.html", data)
 }
 
 // e.GET("/users/:id", getUser)
@@ -204,17 +210,20 @@ func getUser(c echo.Context) error {
 
 // upload photos
 func uploadPage(c echo.Context) error {
+	data := make(map[string]interface{}, 3)
 	sess, err := session.Get("session", c)
 	if err != nil {
 		fmt.Println("erro upload session is : ", err)
 	}
 	email := sess.Values["email"]
+    name := sess.Values["name"]
+	data["name"] = name
 	if email == nil {
 		// TODO flash here
 		return c.Redirect(http.StatusSeeOther, "/login") // 303 code
 	}
 	// c.Response().Status
-	return c.Render(200, "upload.html", email)
+    return c.Render(200, "upload.html", data)
 }
 
 // TODO store all session in dedicated file or database later

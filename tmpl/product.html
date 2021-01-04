@@ -1,16 +1,6 @@
-   {{template "header.html"}}
-   <div class=rt>
-   {{if .name }} 
-   <a href="/{{.name}}" class=acount>{{.name}}</a>
-   {{- else}}
-   <a href="/login">Login</a>
-   <a href="/sign">Signup</a>
-   {{- end}}
-   </div>
-</nav>
-
+{{template "header.html"}}
+{{ template "header.html" . }}
 <body>
-
 <div class=catigories>
     <a href="/cars">cars</a>
     <a href="/animal">animals</a>

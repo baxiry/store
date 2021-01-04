@@ -12,6 +12,15 @@
    <a href="/">Home</a>
    <a href="/mystore">Mystore</a>
    <a href="/stores">Stores</a>
-   <a href="/upload">upload</a>
-   <a href="/{{.name}}">{{.name}}</a>
+   <a href="/upload">upload</a> 
+   <a href="/{{.name}}">{{.name}}</a> 
 
+   <div class=rt>
+   {{if .name }} 
+   <a href="/acount/{{.name}}" class=acount>{{.name}}</a>
+   {{- else}}
+   <a href="/login">Login</a>
+   <a href="/sign">Signup</a>
+   {{- end}}
+   </div>
+</nav>
