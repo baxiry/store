@@ -170,12 +170,12 @@ func home(c echo.Context) error {
 }
 
 func signPage(c echo.Context) error {
-	return c.Render(200, "sign.html", nil)
+    return c.Render(200, "sign.html", "hello")
 }
 
 func loginPage(c echo.Context) error {
 
-	return c.Render(200, "login.html", "hello")
+    return  c.Render(200, "login.html", "hello")
 }
 
 func stores(c echo.Context) error {
