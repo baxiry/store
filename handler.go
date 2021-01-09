@@ -12,8 +12,10 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func getProd(c echo.Context) error {
-	// TODO whish is beter all data of roduct or jast photo ?
+// TODO redirect to latest page after login.
+
+func getOneProd(c echo.Context) error {
+	// TODO whish is beter all data of product or jast photo ?
 	data := make(map[string]interface{})
 	sess, _ := session.Get("session", c)
 	data["name"] = sess.Values["name"]
@@ -25,30 +27,136 @@ func getProd(c echo.Context) error {
 	if err != nil {
 		fmt.Println("with gitCatigories: ", err)
 	}
-	//for i, product := range data["products"].([]Product) {
 	fmt.Println("product form handle : ", data["product"])
-	//	fmt.Println(i, "product is : ", product.Id)
-	//}
 	return c.Render(http.StatusOK, "product.html", data)
 }
 
-// e.GET("/users/:id", getUser)
+// e.GET("/users/:id", getUser) ?
+
 func getProds(c echo.Context) error {
-	// TODO whish is beter all data of roduct or jast photo ?
-	data := make(map[string]interface{})
-	sess, _ := session.Get("session", c)
-	data["name"] = sess.Values["name"]
-	// User ID from path `users/:id`
+
+    data := make(map[string]interface{})
+
+    sess, _ := session.Get("session", c)
 	catigory := c.Param("catigory") // TODO home or catigory.html ?
+
+    data["name"] = sess.Values["name"]
+    data["subCatigories"] = catigories[catigory]
 	data["products"], err = getProductes(catigory)
 	if err != nil {
-		fmt.Println("with gitCatigories: ", err)
+		fmt.Println("in gitCatigories: ", err)
 	}
-	//for i, product := range data["products"].([]Product) {
-	//	fmt.Println(i, "product is : ", product.Photos[0])
-	//	fmt.Println(i, "product is : ", product.Id)
-	//}
-	return c.Render(http.StatusOK, "products.html", data)
+
+    err = c.Render(http.StatusOK, "products.html", data)
+    if err != nil {
+        fmt.Println(err)
+    }
+    return nil
+}
+
+
+func home(c echo.Context) error {
+	sess, _ := session.Get("session", c)
+	name := sess.Values["name"]
+	//fmt.Println("name is : ", name)
+
+	file, err := os.Open("../files")
+	if err != nil {
+		fmt.Printf("failed opening directory: %s\n", err)
+	}
+	defer file.Close()
+
+	Photonames := make([]string, 0)
+	list, _ := file.Readdirnames(0) // 0 to read all files and folders
+	for _, fileName := range list {
+		Photonames = append(Photonames, fileName)
+	}
+
+	data := make(map[string]interface{}, 3)
+	data["name"] = name // from session or from memcach ?
+	data["photos"] = Photonames
+
+    return c.Render(http.StatusOK, "home.html", data)
+}
+
+func stores(c echo.Context) error {
+	sess, _ := session.Get("session", c)
+
+    data := make(map[string]interface{}, 3)
+	name := sess.Values["name"]
+	data["name"] = name // from session or from memcach ?
+
+    return c.Render(200, "stores.html", data)
+}
+
+
+var catigories = map[string][]string{
+    "cars":[]string{"mersides", "volswagn", "shefrole", "ford", "jarary", "jawad"},
+    "animals":[]string{"dogs", "sheeps", "elephens", "checkens", "lions"},
+    "motors":[]string{"harly", "senteroi", "basher", "hddaf", "mobilite"},
+    "mobiles":[]string{"sumsung", "apple", "oppo", "netro", "nokia"},
+    "computers":[]string{"dell", "toshipa", "samsung", "hwawi", "hamed"},
+    "services":[]string{"penter", "developer", "cleaner", "shooter", "gamer"}, //services
+    "others":[]string{"somthing", "another-somth", "else", "anythings"},
+}
+
+func mysess(c echo.Context, name, email string) {
+	sess, _ := session.Get("session", c)
+	sess.Options = &sessions.Options{
+		Path:     "/",
+        MaxAge:   3000,   // = 60s * 60 = 1h,
+		HttpOnly: true, // no websocket or any thing else
+	}
+	sess.Values["name"] = name
+	sess.Values["email"] = email
+	sess.Save(c.Request(), c.Response())
+}
+
+// upload photos
+func uploadPage(c echo.Context) error {
+	data := make(map[string]interface{}, 3)
+	sess, err := session.Get("session", c)
+	if err != nil {
+		fmt.Println("erro upload session is : ", err)
+	}
+	email := sess.Values["email"]
+    name := sess.Values["name"]
+	data["name"] = name
+	if email == nil {
+		// TODO flash here
+
+		return c.Redirect(http.StatusSeeOther, "/login") // 303 code
+	}
+	// c.Response().Status
+    return c.Render(200, "upload.html", data)
+}
+
+
+func login(c echo.Context) error {
+	femail := c.FormValue("email")
+	fpass := c.FormValue("password")
+	name, email, pass := getUsername(femail)
+
+	if pass == fpass && femail == email {
+		//userSession[email] = name
+		mysess(c, name, email)
+		return c.Redirect(http.StatusSeeOther, "/") // 303 code
+		// TODO redirect to latest page
+	}
+	return c.Render(200, "login.html", "Username or password is wrong")
+}
+
+func signup(c echo.Context) error {
+	name := c.FormValue("username")
+	pass := c.FormValue("password")
+	email := c.FormValue("email")
+	phon := c.FormValue("phon")
+	err := insertUser(name, pass, email, phon)
+	if err != nil {
+        //fmt.Println(err)
+		return c.Render(200, "sign.html", "wrrone")
+	}
+	return c.Redirect(http.StatusSeeOther, "/login") // 303 code
 }
 
 func upload(c echo.Context) error {
@@ -106,69 +214,6 @@ func upload(c echo.Context) error {
 	return c.Redirect(http.StatusSeeOther, "/") // 303 code
 }
 
-func mysess(c echo.Context, name, email string) {
-	sess, _ := session.Get("session", c)
-	sess.Options = &sessions.Options{
-		Path:     "/",
-        MaxAge:   3000,   // = 60s * 60 = 1h,
-		HttpOnly: true, // no websocket or any thing else
-	}
-	sess.Values["name"] = name
-	sess.Values["email"] = email
-	sess.Save(c.Request(), c.Response())
-}
-
-func login(c echo.Context) error {
-	femail := c.FormValue("email")
-	fpass := c.FormValue("password")
-	name, email, pass := getUsername(femail)
-
-	if pass == fpass && femail == email {
-		//userSession[email] = name
-		mysess(c, name, email)
-		return c.Redirect(http.StatusSeeOther, "/") // 303 code
-		// TODO redirect to latest page
-	}
-	return c.Render(200, "login.html", "Username or password is wrong")
-}
-
-func signup(c echo.Context) error {
-	name := c.FormValue("username")
-	pass := c.FormValue("password")
-	email := c.FormValue("email")
-	phon := c.FormValue("phon")
-	err := insertUser(name, pass, email, phon)
-	if err != nil {
-        //fmt.Println(err)
-		return c.Render(200, "sign.html", "wrrone")
-	}
-	return c.Redirect(http.StatusSeeOther, "/login") // 303 code
-}
-
-func home(c echo.Context) error {
-	sess, _ := session.Get("session", c)
-	name := sess.Values["name"]
-	//fmt.Println("name is : ", name)
-
-	file, err := os.Open("../files")
-	if err != nil {
-		fmt.Printf("failed opening directory: %s\n", err)
-	}
-	defer file.Close()
-
-	Photonames := make([]string, 0)
-	list, _ := file.Readdirnames(0) // 0 to read all files and folders
-	for _, fileName := range list {
-		Photonames = append(Photonames, fileName)
-	}
-
-	data := make(map[string]interface{}, 3)
-	data["name"] = name // from session or from memcach ?
-	data["photos"] = Photonames
-
-    return c.Render(http.StatusOK, "home.html", data)
-}
-
 func signPage(c echo.Context) error {
     return c.Render(200, "sign.html", "hello")
 }
@@ -178,14 +223,12 @@ func loginPage(c echo.Context) error {
     return  c.Render(200, "login.html", "hello")
 }
 
-func stores(c echo.Context) error {
-	sess, _ := session.Get("session", c)
 
-    data := make(map[string]interface{}, 3)
-	name := sess.Values["name"]
-	data["name"] = name // from session or from memcach ?
-
-    return c.Render(200, "stores.html", data)
+// e.GET("/users/:id", getUser)
+func getUser(c echo.Context) error {
+	// User ID from path `users/:id`
+	id := c.Param("id")
+	return c.Render(http.StatusOK, "user.html", id)
 }
 
 func acount(c echo.Context) error {
@@ -201,36 +244,7 @@ func acount(c echo.Context) error {
     return c.Render(200, "acount.html", data)
 }
 
-// e.GET("/users/:id", getUser)
-func getUser(c echo.Context) error {
-	// User ID from path `users/:id`
-	id := c.Param("id")
-	return c.Render(http.StatusOK, "user.html", id)
-}
-
-// upload photos
-func uploadPage(c echo.Context) error {
-	data := make(map[string]interface{}, 3)
-	sess, err := session.Get("session", c)
-	if err != nil {
-		fmt.Println("erro upload session is : ", err)
-	}
-	email := sess.Values["email"]
-    name := sess.Values["name"]
-	data["name"] = name
-	if email == nil {
-		// TODO flash here
-		return c.Redirect(http.StatusSeeOther, "/login") // 303 code
-	}
-	// c.Response().Status
-    return c.Render(200, "upload.html", data)
-}
-
-// TODO store all session in dedicated file or database later
-// becose when restart server not lose currents session clients.
-// TODO redirect to latest page after login
 /* Cookies
-
 func writeCookie(c echo.Context, email string) error {
 	cookie := new(http.Cookie)
 	cookie.Name = "email"
@@ -244,7 +258,7 @@ func writeCookie(c echo.Context, email string) error {
 func readCookie(c echo.Context) (string, error) {
 	cookie, err := c.Cookie("username")
 	if err != nil {
-		return "", err
+        return "", err
 	}
 	fmt.Println(cookie.Name)
 	fmt.Println(cookie.Value)
