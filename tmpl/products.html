@@ -13,12 +13,11 @@
 </div>
 
 <div class="center">                                                        
-<div class=catigories>
-{{range .subCatigories}}
-    <a>{{.}}<a>
-{{end}}
-
-</div>
+    <div class=subCatigories>
+        {{range .subCatigories}}
+        <a>{{.}}<a>
+        {{end}}
+    </div>
 
     {{ range .products }} 
     <a href="product/{{.Id}}">
