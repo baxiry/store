@@ -156,6 +156,15 @@ func signup(c echo.Context) error {
 	return c.Redirect(http.StatusSeeOther, "/login") // 303 code
 }
 
+func photoFold() string {
+	if os.Getenv("USERNAME") == "fedora" {
+		fmt.Println("username is : ", "fedora")
+		return "/home/fedora/repo/files/"
+	}
+	fmt.Println("username is : ", "root")
+	return "/root/files/"
+}
+
 func upload(c echo.Context) error {
 	// TODO: how upload this ?.  definde uploader by session
 	sess, _ := session.Get("session", c)
@@ -197,7 +206,7 @@ func upload(c echo.Context) error {
 		}
 		defer src.Close()
 		// Destination
-		dst, err := os.Create("../files/" + file.Filename)
+		dst, err := os.Create(photoFold() + file.Filename)
 		if err != nil {
 			return err
 		}

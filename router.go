@@ -3,6 +3,7 @@ package main
 import (
 	"html/template"
 	"io"
+	"os"
 
 	"github.com/labstack/echo/v4"
 )
@@ -15,9 +16,16 @@ func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Con
 	return t.templates.ExecuteTemplate(w, name, data)
 }
 
+// path file is depends to enveronment.
+
 func templ() *Template {
+	var p string
+	if os.Getenv("USERNAME") != "fedora" {
+		p = "/root/store/"
+	}
 	files := []string{
-		"tmpl/home.html", "tmpl/acount.html", "tmpl/login.html", "tmpl/sign.html", "tmpl/stores.html", "tmpl/mystore.html",
-		"tmpl/upload.html", "tmpl/product.html", "tmpl/products.html", "tmpl/part/header.html", "tmpl/part/footer.html"}
+		p + "tmpl/home.html", p + "tmpl/acount.html", p + "tmpl/login.html", p + "tmpl/sign.html", p + "tmpl/stores.html", p + "tmpl/mystore.html",
+		p + "tmpl/upload.html", p + "tmpl/product.html", p + "tmpl/products.html", p + "tmpl/part/header.html", p + "tmpl/part/footer.html",
+	}
 	return &Template{templates: template.Must(template.ParseFiles(files...))}
 }
