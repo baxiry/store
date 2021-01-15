@@ -12,48 +12,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// TODO redirect to latest page after login.
-
-func getOneProd(c echo.Context) error {
-	// TODO whish is beter all data of product or jast photo ?
-	data := make(map[string]interface{})
-	sess, _ := session.Get("session", c)
-	data["name"] = sess.Values["name"]
-	// User ID from path `users/:id`
-	id := c.Param("id") // TODO home or catigory.html ?
-	productId, _ := strconv.Atoi(id)
-
-	data["product"], err = getProduct(productId)
-	if err != nil {
-		fmt.Println("with gitCatigories: ", err)
-	}
-	fmt.Println("product form handle : ", data["product"])
-	return c.Render(http.StatusOK, "product.html", data)
-}
-
-// e.GET("/users/:id", getUser) ?
-
-func getProds(c echo.Context) error {
-
-	data := make(map[string]interface{})
-
-	sess, _ := session.Get("session", c)
-	catigory := c.Param("catigory") // TODO home or catigory.html ?
-
-	data["name"] = sess.Values["name"]
-	data["subCatigories"] = catigories[catigory]
-	data["products"], err = getProductes(catigory)
-	if err != nil {
-		fmt.Println("in gitCatigories: ", err)
-	}
-
-	err = c.Render(http.StatusOK, "products.html", data)
-	if err != nil {
-		fmt.Println(err)
-	}
-	return nil
-}
-
+// TODO: will do not render all photos
 func home(c echo.Context) error {
 	sess, _ := session.Get("session", c)
 	name := sess.Values["name"]
@@ -72,30 +31,60 @@ func home(c echo.Context) error {
 	}
 
 	data := make(map[string]interface{}, 3)
-	data["name"] = name // from session or from memcach ?
+	data["name"] = name
 	data["photos"] = Photonames
 
 	return c.Render(http.StatusOK, "home.html", data)
 }
 
-func stores(c echo.Context) error {
+// TODO redirect to latest page after login.
+func getOneProd(c echo.Context) error {
+	// TODO whish is beter all data of product or jast photo ?
+	data := make(map[string]interface{})
 	sess, _ := session.Get("session", c)
+	data["name"] = sess.Values["name"]
+	// User ID from path `users/:id`
+	id := c.Param("id") // TODO home or catigory.html ?
+	productId, _ := strconv.Atoi(id)
 
-	data := make(map[string]interface{}, 3)
-	name := sess.Values["name"]
-	data["name"] = name // from session or from memcach ?
+	data["product"], err = getProduct(productId)
+	if err != nil {
+		fmt.Println("with gitCatigories: ", err)
+	}
+	//fmt.Println("product form handle : ", data["product"])
+	return c.Render(http.StatusOK, "product.html", data)
+}
 
-	return c.Render(200, "stores.html", data)
+// getProduct get all data of one product from db, and reder it
+func getProds(c echo.Context) error {
+	data := make(map[string]interface{})
+
+	sess, _ := session.Get("session", c)
+	catigory := c.Param("catigory") // TODO home or catigory.html ?
+
+	data["name"] = sess.Values["name"]
+	data["subCatigories"] = catigories[catigory]
+	data["products"], err = getProductes(catigory)
+	// TODO : handle or ignore this error ?
+	if err != nil {
+		fmt.Println("in gitCatigories: ", err)
+	}
+
+	err = c.Render(http.StatusOK, "products.html", data)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return nil
 }
 
 var catigories = map[string][]string{
-	"cars":      []string{"mersides", "volswagn", "shefrole", "ford", "jarary", "jawad"},
-	"animals":   []string{"dogs", "sheeps", "elephens", "checkens", "lions"},
-	"motors":    []string{"harly", "senteroi", "basher", "hddaf", "mobilite"},
-	"mobiles":   []string{"sumsung", "apple", "oppo", "netro", "nokia"},
-	"computers": []string{"dell", "toshipa", "samsung", "hwawi", "hamed"},
-	"services":  []string{"penter", "developer", "cleaner", "shooter", "gamer"}, //services
-	"others":    []string{"somthing", "another-somth", "else", "anythings"},
+	"cars":      {"mersides", "volswagn", "shefrole", "ford", "jarary", "jawad"},
+	"animals":   {"dogs", "sheeps", "elephens", "checkens", "lions"},
+	"motors":    {"harly", "senteroi", "basher", "hddaf", "mobilite"},
+	"mobiles":   {"sumsung", "apple", "oppo", "netro", "nokia"},
+	"computers": {"dell", "toshipa", "samsung", "hwawi", "hamed"},
+	"services":  {"penter", "developer", "cleaner", "shooter", "gamer"}, //services
+	"others":    {"somthing", "another-somth", "else", "anythings"},
 }
 
 func mysess(c echo.Context, name, email string) {
@@ -156,6 +145,7 @@ func signup(c echo.Context) error {
 	return c.Redirect(http.StatusSeeOther, "/login") // 303 code
 }
 
+// folder when photos is stored.
 func photoFold() string {
 	if os.Getenv("USERNAME") == "fedora" {
 		fmt.Println("username is : ", "fedora")
@@ -225,20 +215,11 @@ func signPage(c echo.Context) error {
 }
 
 func loginPage(c echo.Context) error {
-
 	return c.Render(200, "login.html", "hello")
 }
 
-// e.GET("/users/:id", getUser)
-func getUser(c echo.Context) error {
-	// User ID from path `users/:id`
-	id := c.Param("id")
-	return c.Render(http.StatusOK, "user.html", id)
-}
-
+// acount render profile of user.
 func acount(c echo.Context) error {
-	//name := c.Param("name")
-	//fmt.Println("param is : ", name)
 	sess, _ := session.Get("session", c)
 	data := make(map[string]interface{}, 3)
 	data["name"] = sess.Values["name"]
@@ -247,6 +228,25 @@ func acount(c echo.Context) error {
 		return c.Redirect(http.StatusSeeOther, "/login") // 303 code
 	}
 	return c.Render(200, "acount.html", data)
+}
+
+// e.GET("/users/:id", getUser)
+// remove this function
+func getUser(c echo.Context) error {
+	// User ID from path `users/:id`
+	id := c.Param("id")
+	return c.Render(http.StatusOK, "user.html", id)
+}
+
+// perhaps is beter ignoring this feater ??!
+func stores(c echo.Context) error {
+	sess, _ := session.Get("session", c)
+
+	data := make(map[string]interface{}, 3)
+	name := sess.Values["name"]
+	data["name"] = name // from session or from memcach ?
+
+	return c.Render(200, "stores.html", data)
 }
 
 /* Cookies

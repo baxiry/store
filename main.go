@@ -29,7 +29,7 @@ func main() {
 	e.POST("/sign", signup)
 	e.GET("/login", loginPage)
 	e.POST("/login", login)
-	e.GET("/stores", stores)
+	//e.GET("/stores", stores)
 	e.GET("/acount/:name", acount)
 	e.GET("/:catigory", getProds)
 	e.GET("/:catigory/:id", getOneProd)
