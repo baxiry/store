@@ -18,21 +18,9 @@ func home(c echo.Context) error {
 	name := sess.Values["name"]
 	//fmt.Println("name is : ", name)
 
-	file, err := os.Open("../files")
-	if err != nil {
-		fmt.Printf("failed opening directory: %s\n", err)
-	}
-	defer file.Close()
-
-	Photonames := make([]string, 0)
-	list, _ := file.Readdirnames(0) // 0 to read all files and folders
-	for _, fileName := range list {
-		Photonames = append(Photonames, fileName)
-	}
-
 	data := make(map[string]interface{}, 3)
 	data["name"] = name
-	data["photos"] = Photonames
+	data["catigories"] = catigories
 
 	return c.Render(http.StatusOK, "home.html", data)
 }
@@ -145,16 +133,6 @@ func signup(c echo.Context) error {
 	return c.Redirect(http.StatusSeeOther, "/login") // 303 code
 }
 
-// folder when photos is stored.
-func photoFold() string {
-	if os.Getenv("USERNAME") == "fedora" {
-		fmt.Println("username is : ", "fedora")
-		return "/home/fedora/repo/files/"
-	}
-	fmt.Println("username is : ", "root")
-	return "/root/files/"
-}
-
 func upload(c echo.Context) error {
 	// TODO: how upload this ?.  definde uploader by session
 	sess, _ := session.Get("session", c)
@@ -175,6 +153,7 @@ func upload(c echo.Context) error {
 	//fmt.Println("files is :", files[0].Filename)
 	picts := ""
 	for _, v := range files {
+		fmt.Println(v.Filename)
 		fmt.Println(v.Filename)
 		picts += v.Filename
 		picts += "];["
@@ -247,6 +226,16 @@ func stores(c echo.Context) error {
 	data["name"] = name // from session or from memcach ?
 
 	return c.Render(200, "stores.html", data)
+}
+
+// folder when photos is stored.
+func photoFold() string {
+	if os.Getenv("USERNAME") == "fedora" {
+		fmt.Println("username is : ", "fedora")
+		return "/home/fedora/repo/files/"
+	}
+	fmt.Println("username is : ", "root")
+	return "/root/files/"
 }
 
 /* Cookies
