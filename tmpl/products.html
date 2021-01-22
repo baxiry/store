@@ -1,6 +1,9 @@
 {{ template "header.html" . }}
 <body>
 <!-- header is head and navbar -->
+<div class="cor">
+<div class=catigories>
+</div>
 <div class=catigories>
     <a href="/cars">cars</a>
     <a href="/animals">animals</a>
@@ -11,13 +14,13 @@
     <a href="/others">others</a>
 </div>
 
-<div class="center">                                                        
-    <div class=subCatigories>
+        <div class="catigories">
         {{range .subCatigories}}
-        <a>{{.}}<a>
+        <a>{{.}}</a>
         {{end}}
-    </div>
+        </div>
 
+<div class="center">                                                        
     {{ range .products }} 
     <a href="product/{{.Id}}">
     <div class=card>
@@ -28,11 +31,10 @@
     </a>
     {{ end }}
 </div>
-<!--<img src="data:image/png;base64, .... -->
 
-{{template "footer.html"}}
+<div class="footer">this is a awsome footer</div>
+</div>
 </body>
-<script src=/a/app.js></script>
 <style>
 img {
     /*
@@ -43,24 +45,10 @@ img {
     border-color: grey;*/
 }
 
-.subcat {
-    color: grey;
-    padding: 3px;
-}
 .card {
     margin: 12px;
     background-color: #00FFCC;
     padding:10px;
-
-    /*border: solid;
-    border-top-width: 1px;
-    border-right-width: 1px;
-    border-bottom-width: 1px;
-    border-left-width: 1px;
-    // height:200px;
-    // width:300px;
-    //padding:10px;
-    */
 }
 .card:hover {
     /*box-shadow: 3px 5px 10px 4px #CFCFCF;*/
