@@ -20,7 +20,7 @@ func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Con
 
 func templ() *Template {
 	var p string
-	if os.Getenv("USERNAME") != "fedora" {
+	if os.Getenv("USERNAME") != "fedor" {
 		p = "/root/store/"
 	}
 	files := []string{

@@ -8,7 +8,7 @@ import (
 )
 
 func assets() string {
-	if os.Getenv("USERNAME") != "fedora" {
+	if os.Getenv("USERNAME") != "fedor" {
 		return "/root/store/assets"
 	}
 	return "assets"
@@ -32,7 +32,8 @@ func main() {
 	//e.GET("/stores", stores)
 	e.GET("/acount/:name", acount)
 	e.GET("/:catigory", getProds)
-	e.GET("/:catigory/:id", getOneProd)
+	//e.GET("/product/:id", getOneProd)
+	e.GET("/:catigory/:id", getOneProd) // whech is beter ? :catigory or /product ?
 	e.GET("/upload", uploadPage)
 	e.POST("/upload", upload)
 	// e.GET("/:user", getUser)
