@@ -16,7 +16,11 @@ func assets() string {
 
 func main() {
 
+	db := setdb()
+	defer db.Close()
+
 	e := echo.New()
+
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte("secret"))))
 
 	e.Renderer = templ()
@@ -37,9 +41,6 @@ func main() {
 	e.GET("/upload", uploadPage)
 	e.POST("/upload", upload)
 	// e.GET("/:user", getUser)
-
-	db := setdb()
-	defer db.Close()
 
 	e.Logger.Fatal(e.Start(":8080"))
 }

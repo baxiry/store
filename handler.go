@@ -14,6 +14,7 @@ import (
 
 // TODO: will do not render all photos
 func home(c echo.Context) error {
+
 	sess, _ := session.Get("session", c)
 	name := sess.Values["name"]
 	//fmt.Println("name is : ", name)
@@ -163,7 +164,6 @@ func upload(c echo.Context) error {
 
 	err = insertProduct(email.(string), title, catigory, details, picts, price)
 	if err != nil {
-		fmt.Println()
 		fmt.Println("error in insert product", err)
 	}
 
@@ -186,7 +186,12 @@ func upload(c echo.Context) error {
 		}
 	}
 	// TODO redirect to home or to acount ??
-	return c.Redirect(http.StatusSeeOther, "/") // 303 code
+	err = c.Redirect(http.StatusSeeOther, "/") // 303 code
+	if err != nil {
+		fmt.Println("redirect err", err)
+		return nil
+	}
+	return nil
 }
 
 func signPage(c echo.Context) error {
@@ -230,11 +235,9 @@ func stores(c echo.Context) error {
 
 // folder when photos is stored.
 func photoFold() string {
-	if os.Getenv("USERNAME") == "fedora" {
-		fmt.Println("username is : ", "fedora")
-		return "/home/fedora/repo/files/"
+	if os.Getenv("USERNAME") == "fedor" {
+		return "/home/fedor/repo/files/"
 	}
-	fmt.Println("username is : ", "root")
 	return "/root/files/"
 }
 
