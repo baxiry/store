@@ -14,7 +14,6 @@ import (
 
 // TODO: will do not render all photos
 func home(c echo.Context) error {
-
 	sess, _ := session.Get("session", c)
 	name := sess.Values["name"]
 	//fmt.Println("name is : ", name)
@@ -22,7 +21,6 @@ func home(c echo.Context) error {
 	data := make(map[string]interface{}, 3)
 	data["name"] = name
 	data["catigories"] = catigories
-
 	return c.Render(http.StatusOK, "home.html", data)
 }
 
@@ -214,7 +212,6 @@ func acount(c echo.Context) error {
 	return c.Render(200, "acount.html", data)
 }
 
-// e.GET("/users/:id", getUser)
 // remove this function
 func getUser(c echo.Context) error {
 	// User ID from path `users/:id`
@@ -225,11 +222,9 @@ func getUser(c echo.Context) error {
 // perhaps is beter ignoring this feater ??!
 func stores(c echo.Context) error {
 	sess, _ := session.Get("session", c)
-
 	data := make(map[string]interface{}, 3)
 	name := sess.Values["name"]
 	data["name"] = name // from session or from memcach ?
-
 	return c.Render(200, "stores.html", data)
 }
 
@@ -241,24 +236,3 @@ func photoFold() string {
 	return "/root/files/"
 }
 
-/* Cookies
-func writeCookie(c echo.Context, email string) error {
-	cookie := new(http.Cookie)
-	cookie.Name = "email"
-	cookie.Value = email
-	cookie.Expires = time.Now().Add(1 * time.Minute)
-	c.SetCookie(cookie)
-	//return c.String(http.StatusOK, "write a cookie")
-	return nil
-}
-
-func readCookie(c echo.Context) (string, error) {
-	cookie, err := c.Cookie("username")
-	if err != nil {
-        return "", err
-	}
-	fmt.Println(cookie.Name)
-	fmt.Println(cookie.Value)
-	return cookie.Value, nil //c.String(http.StatusOK, "read a cookie")
-}
-*/
