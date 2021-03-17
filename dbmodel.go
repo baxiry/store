@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -111,7 +112,16 @@ func setdb() *sql.DB {
 		// TODO report this error.
 		// wehen db is stoped no error is return.
 		// we expecte errore no database is runing
+
+        // my be this error is fixed with panic ping pong bellow
 	}
+    
+    if err = db.Ping(); err != nil {
+
+        // TODO handle this error: dial tcp 127.0.0.1:3306: connect: connection refused
+        log.Panic("no pong reseved. database is not runing or there a : ", err)
+    }
+
 	fmt.Println("new db connection")
 	return db
 }

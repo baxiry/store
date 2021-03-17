@@ -8,6 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// hella
 func assets() string {
 	if os.Getenv("USERNAME") != "fedor" {
 		return "/root/store/assets"

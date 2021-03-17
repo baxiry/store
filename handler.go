@@ -235,4 +235,3 @@ func photoFold() string {
 	}
 	return "/root/files/"
 }
-
