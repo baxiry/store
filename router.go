@@ -1,9 +1,9 @@
 package main
 
 import (
+	"embed"
 	"html/template"
 	"io"
-	"os"
 
 	"github.com/labstack/echo/v4"
 )
@@ -16,8 +16,25 @@ func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Con
 	return t.templates.ExecuteTemplate(w, name, data)
 }
 
-// path file is depends to enveronment.
+//go:embed tmpl/*
+var filesEmbed embed.FS
 
+func templ() *Template {
+	files := []string{
+		"tmpl/home.html", "tmpl/acount.html", "tmpl/login.html", "tmpl/sign.html", "tmpl/stores.html", "tmpl/mystore.html",
+        "tmpl/upload.html", "tmpl/product.html", "tmpl/products.html", "tmpl/part/header.html", "tmpl/part/footer.html",
+	}
+
+    return &Template{templates: template.Must(template.ParseFS(filesEmbed, files...))}
+}
+//t, err := template.ParseFS(assetData, "tmpl/")
+//if err != nil {
+//		fmt.Println(err)
+//}
+
+
+// path file is depends to enveronment.
+/*
 func templ() *Template {
 	var p string
 	if os.Getenv("USERNAME") != "fedor" {
@@ -29,3 +46,6 @@ func templ() *Template {
 	}
 	return &Template{templates: template.Must(template.ParseFiles(files...))}
 }
+*/
+
+
