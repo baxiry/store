@@ -4,8 +4,10 @@ import (
 	"embed"
 	"html/template"
 	"io"
+	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 type Template struct {
@@ -27,6 +29,17 @@ func templ() *Template {
 
     return &Template{templates: template.Must(template.ParseFS(filesEmbed, files...))}
 }
+
+//go:embed assets/*
+var content embed.FS
+
+var contentHandler = echo.WrapHandler(http.FileServer(http.FS(content)))
+var contentRewrite = middleware.Rewrite(map[string]string{"/": "/static/$1"})
+var e = echo.New()
+func SetupRoutes() {
+    e.GET("/*", contentHandler, contentRewrite)
+}
+
 //t, err := template.ParseFS(assetData, "tmpl/")
 //if err != nil {
 //		fmt.Println(err)

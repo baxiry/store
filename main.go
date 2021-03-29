@@ -1,17 +1,13 @@
 package main
 
 import (
-	"embed"
-	"net/http"
 	"os"
 
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 )
 
-//var asset embed.FS
 // hella
 func assets() string {
 	if os.Getenv("USERNAME") != "fedor" {
@@ -20,20 +16,12 @@ func assets() string {
 	return "assets"
 }
 
-//go:embed assets/*
-var content embed.FS
-
-var contentHandler = echo.WrapHandler(http.FileServer(http.FS(content)))
-var contentRewrite = middleware.Rewrite(map[string]string{"/*": "/static/$1"})
-var e = echo.New()
-func SetupRoutes() {
-   e.GET("/*", contentHandler, contentRewrite)
-}
-
 func main() {
 
 	db := setdb()
 	defer db.Close()
+    
+    e := echo.New()
     SetupRoutes()
     //e.GET("/a", contentHandler, contentRewrite)
 
@@ -41,7 +29,7 @@ func main() {
 
 	e.Renderer = templ()
 
-    e.Static("/a", assets())
+    //e.Static("/a", assets())
 	e.Static("/fs", photoFold())
 
 	e.GET("/", home)
