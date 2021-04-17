@@ -1,13 +1,11 @@
 package main
 
 import (
-	"embed"
 	"html/template"
 	"io"
-	"net/http"
+	"os"
 
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 )
 
 type Template struct {
@@ -17,7 +15,7 @@ type Template struct {
 func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
 	return t.templates.ExecuteTemplate(w, name, data)
 }
-
+/*
 //go:embed tmpl/*
 var filesEmbed embed.FS
 
@@ -40,6 +38,8 @@ func SetupRoutes() {
     e.GET("/*", contentHandler, contentRewrite)
 }
 
+*/
+
 //t, err := template.ParseFS(assetData, "tmpl/")
 //if err != nil {
 //		fmt.Println(err)
@@ -47,7 +47,6 @@ func SetupRoutes() {
 
 
 // path file is depends to enveronment.
-/*
 func templ() *Template {
 	var p string
 	if os.Getenv("USERNAME") != "fedor" {
@@ -59,6 +58,5 @@ func templ() *Template {
 	}
 	return &Template{templates: template.Must(template.ParseFiles(files...))}
 }
-*/
 
 

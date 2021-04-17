@@ -22,14 +22,14 @@ func main() {
 	defer db.Close()
     
     e := echo.New()
-    SetupRoutes()
+    //SetupRoutes()
     //e.GET("/a", contentHandler, contentRewrite)
 
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte("secret"))))
 
 	e.Renderer = templ()
 
-    //e.Static("/a", assets())
+    e.Static("/a", assets())
 	e.Static("/fs", photoFold())
 
 	e.GET("/", home)
