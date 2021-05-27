@@ -12,8 +12,13 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// TODO: will do not render all photos
+var currentPage string
+
+// TODO url := c.Request().URL  we need change url path ? example /cats/ to /cats
+
+
 func home(c echo.Context) error {
+
 	sess, _ := session.Get("session", c)
 	name := sess.Values["name"]
 	//fmt.Println("name is : ", name)
@@ -21,7 +26,7 @@ func home(c echo.Context) error {
 	data := make(map[string]interface{}, 3)
 	data["name"] = name
 	data["catigories"] = catigories
-	return c.Render(http.StatusOK, "home.html", data)
+    return c.Render(http.StatusOK, "home.html", data)
 }
 
 // TODO redirect to latest page after login.
@@ -39,7 +44,7 @@ func getOneProd(c echo.Context) error {
 		fmt.Println("with gitCatigories: ", err)
 	}
 	//fmt.Println("product form handle : ", data["product"])
-	return c.Render(http.StatusOK, "product.html", data)
+    return c.Render(http.StatusOK, "product.html", data)
 }
 
 // getProduct get all data of one product from db, and reder it
@@ -52,16 +57,14 @@ func getProds(c echo.Context) error {
 	data["name"] = sess.Values["name"]
 	data["subCatigories"] = catigories[catigory]
 	data["products"], err = getProductes(catigory)
-	// TODO : handle or ignore this error ?
-	if err != nil {
-		fmt.Println("in gitCatigories: ", err)
-	}
+    fmt.Println(data)
+	
+    // TODO : handle or ignore this error ?
+	//if err != nil {
+	//	fmt.Println("in gitCatigories: ", err)
+    //}
 
-	err = c.Render(http.StatusOK, "products.html", data)
-	if err != nil {
-		fmt.Println(err)
-	}
-	return nil
+	return c.Render(http.StatusOK, "products.html", data)
 }
 
 var catigories = map[string][]string{
@@ -183,13 +186,14 @@ func upload(c echo.Context) error {
 			return err
 		}
 	}
-	// TODO redirect to home or to acount ??
-	err = c.Redirect(http.StatusSeeOther, "/") // 303 code
-	if err != nil {
-		fmt.Println("redirect err", err)
-		return nil
-	}
-	return nil
+	
+    // TODO redirect to home or to acount ??
+	return c.Redirect(http.StatusSeeOther, "/") // 303 code
+	//if err != nil {
+	//	fmt.Println("redirect err", err)
+	//	return nil
+	//}
+    //return nil
 }
 
 func signPage(c echo.Context) error {
@@ -198,6 +202,11 @@ func signPage(c echo.Context) error {
 
 func loginPage(c echo.Context) error {
 	return c.Render(200, "login.html", "hello")
+}
+
+// notFoundPage
+func notFoundPage(c echo.Context) error {
+    return c.Render(200, "notfound.html", nil)
 }
 
 // acount render profile of user.

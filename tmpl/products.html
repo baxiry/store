@@ -20,6 +20,8 @@
         {{end}}
         </div>
 
+        {{if not .products}}<h1> Nothing to show </h1> {{end}}
+
     {{ range .products }} 
     <a href="product/{{.Id}}">
     <div class=card>
