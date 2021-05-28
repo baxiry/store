@@ -38,8 +38,13 @@ func customHTTPErrorHandler(err error, c echo.Context) {
 // perhaps is beter ignoring this feater ??!
 func myStores(c echo.Context) error { // TODO rename to myproduct ??
 	sess, _ := session.Get("session", c)
-    data := make(map[string]interface{}, 2)
 	name := sess.Values["name"]
+
+    if name == nil {
+		return c.Redirect(http.StatusSeeOther, "/login") // 303 code
+    } 
+    
+    data := make(map[string]interface{}, 2)
     email := sess.Values["email"]
 	data["name"] = name // from session or from memcach ?
     data["email"] = email // from session or from memcach ?
@@ -122,7 +127,7 @@ func mysess(c echo.Context, name, email string) {
 	sess, _ := session.Get("session", c)
 	sess.Options = &sessions.Options{
 		Path:     "/",
-		MaxAge:   3000, // = 60s * 60 = 1h,
+        MaxAge:   30, //s * 60 = 1h,
 		HttpOnly: true, // no websocket or any thing else
 	}
 	sess.Values["name"] = name
