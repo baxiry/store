@@ -24,6 +24,7 @@ func main() {
     e := echo.New()
     //SetupRoutes()
     //e.GET("/a", contentHandler, contentRewrite)
+    e.HTTPErrorHandler = customHTTPErrorHandler
     
 
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte("secret"))))
@@ -52,8 +53,8 @@ func main() {
 
 
     // not found pages
-    e.GET("/:ok/:ok/:ok", notFoundPage)
-    e.GET("/:ok/", notFoundPage)
+    //e.GET("/:ok/:ok/:ok", notFoundPage)
+    //e.GET("/:ok/", notFoundPage)
 
 
 	e.Logger.Fatal(e.Start(":8080"))

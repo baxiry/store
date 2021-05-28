@@ -16,6 +16,25 @@ var currentPage string
 
 // TODO url := c.Request().URL  we need change url path ? example /cats/ to /cats
 
+// costorm error handler
+func customHTTPErrorHandler(err error, c echo.Context) {
+	code := http.StatusInternalServerError
+	if he, ok := err.(*echo.HTTPError); ok {
+		code = he.Code
+	}
+	errorPage := fmt.Sprintf("%d.html", code)
+	if err := c.File(errorPage); err != nil {
+		c.Logger().Error(err)
+	}
+    fmt.Println(err)
+    //c.Redirect(303, "notfound.html")
+    c.Redirect(http.StatusSeeOther, "/notfound") // 303 code
+    return
+}
+
+
+
+
 // perhaps is beter ignoring this feater ??!
 func myStores(c echo.Context) error { // TODO rename to myproduct ??
 	sess, _ := session.Get("session", c)
