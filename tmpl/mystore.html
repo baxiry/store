@@ -1,6 +1,29 @@
 {{ template "header.html" . }}
 <body>
-    <h2>myStore of {{.}}</h2>
-<p>search for product</p>
+<div>
+    <br>
+    <br>
+    <br>
+    
+<div class=center>
+    <h1>My Products</h1>    
+    <h2>{{.name}}</h2>    
+    
+    <h2> {{.email}}</h2>
+    
+    {{range .products}}
+    <div class=card>
+
+        <h3>Id : {{.Id}}</h3>
+        <h3>{{.Title}}</h3>
+        <h3>{{.Photo}}</h3>
+    </div>
+    {{end}}
+
+    <p>search for product</p>
+</div>
+
+</div>
+
 </body>
 </html>

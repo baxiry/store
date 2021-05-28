@@ -22,6 +22,32 @@ type Product struct {
 	Photos      []string
 	Price       string
 }
+func myProducts(owner string) []Product {                                                           
+                                                                                                
+    rows, err := db.Query("select id, title, description, photos, price from stores.products where owner = ?", owner)                      
+    if err != nil {                                                                             
+        fmt.Println(err)                                                                        
+    }                                                                                           
+    defer rows.Close() // ??
+                                                                                                
+    var products = []Product{}                                                                  
+    var p = Product{}                                                                            
+                                                                                                 
+    // iterate over rows                                                                         
+    for rows.Next() {                                                                            
+        err = rows.Scan(&p.Id, &p.Title, &p.Description, &p.Photo, &p.Price)                    
+        if err != nil {                                                                                                         
+            fmt.Println("At myPorducts", err)
+        }                                                                                                         
+
+        products = append(products, p)                                                                            
+                                                                                                                  
+        fmt.Println(p)                                                                                             
+    }                                                                                                             
+    return products                                                                                          
+}                      
+
+
 
 func getProduct(id int) (Product, error) {
 	var p Product
@@ -68,13 +94,14 @@ func getProductes(catigory string) ([]Product, error) {
 func insertProduct(owner, title, catigory, details, picts string, price int) error {
 	insert, err := db.Query(
 		"INSERT INTO stores.products(owner, title, catigory, description, price, photos) VALUES ( ?, ?, ?, ?, ?, ?)",
-		owner, title, catigory, details, price, picts)
+        owner, title, catigory, details, price, picts)
 	// if there is an error inserting, handle it
 	if err != nil {
 		return err
 	}
 	// be careful deferring Queries if you are using transactions
 	defer insert.Close() // TODO why we need closeing this connection ?
+    
 	return nil
 }
 
@@ -105,7 +132,7 @@ func insertUser(user, pass, email, phon string) error {
 }
 
 func setdb() *sql.DB {
-	db, err = sql.Open(
+    db, err = sql.Open(
 		"mysql", "root:123456@tcp(127.0.0.1:3306)/?charset=utf8&parseTime=True&loc=Local")
 	if err != nil { // why no error when db is not runinig ?? 
         fmt.Println("run mysql server", err)

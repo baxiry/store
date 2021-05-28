@@ -16,6 +16,28 @@ var currentPage string
 
 // TODO url := c.Request().URL  we need change url path ? example /cats/ to /cats
 
+// perhaps is beter ignoring this feater ??!
+func myStores(c echo.Context) error { // TODO rename to myproduct ??
+	sess, _ := session.Get("session", c)
+    data := make(map[string]interface{}, 2)
+	name := sess.Values["name"]
+    email := sess.Values["email"]
+	data["name"] = name // from session or from memcach ?
+    data["email"] = email // from session or from memcach ?
+
+
+    data["products"] = myProducts(email.(string))
+    fmt.Println("data products is : ", data["products"])
+
+    err =  c.Render(200, "mystore.html", data)
+    if err != nil {
+        fmt.Println("at myStores function ", err)
+        return nil
+    } 
+
+    return nil// c.Render(200, "mystore.html", data)
+}
+
 
 func home(c echo.Context) error {
 

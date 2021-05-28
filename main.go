@@ -38,8 +38,8 @@ func main() {
 	e.POST("/sign", signup)
 	e.GET("/login", loginPage)
 	e.POST("/login", login)
-	// e.GET("/:user", getUser)
-	// e.GET("/stores", stores)
+    e.GET("/mystore", myStores)
+	e.GET("/stores", stores)
 	e.GET("/acount/:name", acount)
 
     e.GET("/:catigory", getProds) // ?? 
