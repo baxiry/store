@@ -16,27 +16,24 @@ var currentPage string
 
 // TODO url := c.Request().URL  we need change url path ? example /cats/ to /cats
 
-// costorm error handler
-func customHTTPErrorHandler(err error, c echo.Context) {
-	code := http.StatusInternalServerError
-	if he, ok := err.(*echo.HTTPError); ok {
-		code = he.Code
-	}
-	errorPage := fmt.Sprintf("%d.html", code)
-	if err := c.File(errorPage); err != nil {
-		c.Logger().Error(err)
-	}
-    fmt.Println(err)
-    //c.Redirect(303, "notfound.html")
-    c.Redirect(http.StatusSeeOther, "/notfound") // 303 code
-    return
+// delete product
+func deleteProd(c echo.Context) error {
+    // TODO we need checkout sesston ?
+    //TODO duble querye to db is not effecien. we need ajax here.
+    id := c.Param("id")
+    fmt.Println("id is ", id)
+    i, _ := strconv.Atoi(id)
+    err = deleteProducte(i)
+    if err != nil {
+        fmt.Println(err)
+        return nil
+    }
+    return c.Redirect(303, "/mystore")
 }
-
-
-
 
 // perhaps is beter ignoring this feater ??!
 func myStores(c echo.Context) error { // TODO rename to myproduct ??
+    fmt.Println("at myStores function ")
 	sess, _ := session.Get("session", c)
 	name := sess.Values["name"]
 
@@ -51,15 +48,8 @@ func myStores(c echo.Context) error { // TODO rename to myproduct ??
 
 
     data["products"] = myProducts(email.(string))
-    fmt.Println("data products is : ", data["products"])
 
-    err =  c.Render(200, "mystore.html", data)
-    if err != nil {
-        fmt.Println("at myStores function ", err)
-        return nil
-    } 
-
-    return nil// c.Render(200, "mystore.html", data)
+    return c.Render(200, "mystore.html", data)
 }
 
 
@@ -103,7 +93,6 @@ func getProds(c echo.Context) error {
 	data["name"] = sess.Values["name"]
 	data["subCatigories"] = catigories[catigory]
 	data["products"], err = getProductes(catigory)
-    fmt.Println(data)
 	
     // TODO : handle or ignore this error ?
 	//if err != nil {
@@ -127,7 +116,7 @@ func mysess(c echo.Context, name, email string) {
 	sess, _ := session.Get("session", c)
 	sess.Options = &sessions.Options{
 		Path:     "/",
-        MaxAge:   30, //s * 60 = 1h,
+        MaxAge:   60 * 60, // = 1h,
 		HttpOnly: true, // no websocket or any thing else
 	}
 	sess.Values["name"] = name
@@ -290,3 +279,21 @@ func photoFold() string {
 	}
 	return "/root/files/"
 }
+
+func customHTTPErrorHandler(err error, c echo.Context) {
+	code := http.StatusInternalServerError
+	if he, ok := err.(*echo.HTTPError); ok {
+		code = he.Code
+	}
+	errorPage := fmt.Sprintf("%d.html", code)
+	if err := c.File(errorPage); err != nil {
+		c.Logger().Error(err)
+	}
+    fmt.Println(err)
+    //c.Redirect(303, "notfound.html")
+    c.Redirect(http.StatusSeeOther, "/notfound") // 303 code
+    return
+}
+
+
+

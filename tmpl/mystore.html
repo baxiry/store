@@ -14,9 +14,13 @@
     {{range .products}}
     <div class=card>
 
-        <h3>Id : {{.Id}}</h3>
         <h3>{{.Title}}</h3>
         <h3>{{.Photo}}</h3>
+
+        <div dir=rtl>
+            <button href=/update/{{.Id}}> Edit </button>
+            <button onclick=deleteProduct({{.Id}})> Delete </button>
+        </div>
     </div>
     {{end}}
 
@@ -25,5 +29,14 @@
 
 </div>
 
+<script>
+function deleteProduct(id) {
+    //var txt;
+    if (confirm("ARE YOU SURE you wanna delete item no "+id)) {
+        //TODO duble querye to db is not effecien. we need ajax here.
+        location.replace("http://localhost:8080/delete/"+id)
+    } // else {document.querySelector('p') = "cancele order"} 
+}
+</script>
 </body>
 </html>

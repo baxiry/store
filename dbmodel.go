@@ -22,8 +22,26 @@ type Product struct {
 	Photos      []string
 	Price       string
 }
+
+// delete Producte.
+func deleteProducte(id int) error {
+    res, err := db.Exec("DELETE FROM stores.products WHERE id=?", id)
+    if err != nil {
+         return err
+    }
+
+    affectedRows, err := res.RowsAffected()
+
+    if err != nil {
+         return err
+    }
+    fmt.Println("affectedRows: ", affectedRows)
+    // defer res // TODO I need understand this close in mariadb
+	return  nil
+}
+
+
 func myProducts(owner string) []Product {                                                           
-                                                                                                
     rows, err := db.Query("select id, title, description, photos, price from stores.products where owner = ?", owner)                      
     if err != nil {                                                                             
         fmt.Println(err)                                                                        
@@ -42,7 +60,6 @@ func myProducts(owner string) []Product {
 
         products = append(products, p)                                                                            
                                                                                                                   
-        fmt.Println(p)                                                                                             
     }                                                                                                             
     return products                                                                                          
 }                      
@@ -67,6 +84,7 @@ func getProduct(id int) (Product, error) {
 	//fmt.Println("product form db : ", p)
 	return p, nil
 }
+
 
 // getCatigories get all photo name of catigories.
 func getProductes(catigory string) ([]Product, error) {

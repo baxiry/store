@@ -40,4 +40,9 @@ create table tutorials_tbl(
 	PRIMARY KEY ( userid )
 );
 
+//
+DELETE FROM table_name
+WHERE condition;
+
+db.QueryRow("DELETE FROM customer WHERE id=?", id)
 

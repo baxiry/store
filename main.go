@@ -41,6 +41,9 @@ func main() {
 	e.POST("/login", login)
     e.GET("/mystore", myStores)
 	e.GET("/stores", stores)
+    
+    e.GET("/update/:id", getOneProd)//update)
+    e.GET("/delete/:id", deleteProd)//update)
 	e.GET("/acount/:name", acount)
 
     e.GET("/:catigory", getProds) // ?? 
