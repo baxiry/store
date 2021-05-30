@@ -28,7 +28,9 @@ func deleteProd(c echo.Context) error {
         fmt.Println(err)
         return nil
     }
-    return c.Redirect(303, "/mystore")
+    //return c.Redirect(303, "/mystore")
+    
+    return c.String(http.StatusOK, "success!") 
 }
 
 // perhaps is beter ignoring this feater ??!

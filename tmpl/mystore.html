@@ -34,9 +34,33 @@ function deleteProduct(id) {
     //var txt;
     if (confirm("ARE YOU SURE you wanna delete item no "+id)) {
         //TODO duble querye to db is not effecien. we need ajax here.
-        location.replace("http://localhost:8080/delete/"+id)
+        //location.replace("http://localhost:8080/delete/"+id)
+        ajaxDelete(id)
     } // else {document.querySelector('p') = "cancele order"} 
 }
+
+
+function ajaxDelete(id) {
+    // Creating the XMLHttpRequest object
+    var request = new XMLHttpRequest();
+    // Instantiating the request object
+    request.open("GET", "delete/"+id)//"greet.php?fname=John&lname=Clark");
+
+    // Defining event listener for readystatechange event
+    request.onreadystatechange = function() {
+        // Check if the request is compete and was successful
+        if(this.readyState === 4 && this.status === 200) {
+            // Inserting the response from server into an HTML element
+            // TODO show sucssesfull message
+            document.querySelector("p").innerText = "sucssesfull" ;
+            
+
+        }
+    };
+    // Sending the request to the server
+    request.send();
+}
+
 </script>
 </body>
 </html>
