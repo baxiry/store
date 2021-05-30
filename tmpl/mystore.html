@@ -12,7 +12,7 @@
     <h2> {{.email}}</h2>
     
     {{range .products}}
-    <div class=card>
+    <div id="id{{.Id}}" class=card>
 
         <h3>{{.Title}}</h3>
         <h3>{{.Photo}}</h3>
@@ -51,11 +51,12 @@ function ajaxDelete(id) {
         // Check if the request is compete and was successful
         if(this.readyState === 4 && this.status === 200) {
             // Inserting the response from server into an HTML element
-            // TODO show sucssesfull message
+            // TODO show sucssesfull flush message
             document.querySelector("p").innerText = "sucssesfull" ;
             
+            document.querySelector("#id"+id).outerHTML = '<h4>deleteing this product sucssesfull </h4>' ;
 
-        }
+        } // TODO handle error
     };
     // Sending the request to the server
     request.send();
