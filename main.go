@@ -26,33 +26,34 @@ func main() {
     //e.GET("/a", contentHandler, contentRewrite)
     e.HTTPErrorHandler = customHTTPErrorHandler
     
-
+    // TODO store secret key in envrenment
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte("secret"))))
 
 	e.Renderer = templ()
 
+    // files
     e.Static("/a", assets())
 	e.Static("/fs", photoFold())
 
-	e.GET("/", home)
+	// account and verefy
+    e.GET("/", home)
     e.GET("/sign", signPage)
 	e.POST("/sign", signup)
 	e.GET("/login", loginPage)
 	e.POST("/login", login)
+	e.GET("/acount/:name", acount)
+    
+    // store and product
     e.GET("/mystore", myStores)
 	e.GET("/stores", stores)
-    
-    e.GET("/update/:id", getOneProd)//update)
-    e.GET("/delete/:id", deleteProd)//update)
-	e.GET("/acount/:name", acount)
-
+    e.GET("/delete/:id", deleteProd)
     e.GET("/:catigory", getProds) // ?? 
-	
     e.GET("/product/:id", getOneProd)
-    //e.GET("/:catigory/:id", getOneProd) // whech is beter ? :catigory or /product ?
+    e.GET("/update/:id", updateProdPage) 
+    e.POST("/update/:id", updateProd) 
 	e.GET("/upload", uploadPage)
 	e.POST("/upload", upload)
-    
+    //e.GET("/:catigory/:id", getOneProd) // whech is beter ? :catigory or /product ?
 
 
     // not found pages

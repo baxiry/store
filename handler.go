@@ -13,13 +13,59 @@ import (
 )
 
 var currentPage string
+func updateProd(c echo.Context) error {
+	// TODO whish is beter all data of product or jast photo ?
+	
+	//id := c.Param("id") 
+    //productId, _ := strconv.Atoi(id)
+    title := c.FormValue("title")
+    fmt.Println("data prod : ", title)
 
-// TODO url := c.Request().URL  we need change url path ? example /cats/ to /cats
+
+    return c.Redirect(http.StatusSeeOther, "/mystore")
+}
+
+// TODO redirect to latest page after login.
+func updateProdPage(c echo.Context) error {
+	// TODO whish is beter all data of product or jast photo ?
+	data := make(map[string]interface{})
+	sess, _ := session.Get("session", c)
+	data["name"] = sess.Values["name"]
+	// User ID from path `users/:id`
+	id := c.Param("id") // TODO home or catigory.html ?
+	productId, _ := strconv.Atoi(id)
+
+	data["product"], err = getProduct(productId)
+	if err != nil {
+		fmt.Println("with gitCatigories: ", err)
+	}
+    fmt.Println("product form handle : ", data["product"])
+    return c.Render(http.StatusOK, "updateProd.html", data)
+
+/*
+    // TODO whish is beter all data of product or jast photo ?
+	data := make(map[string]interface{})
+	sess, _ := session.Get("session", c)
+	data["name"] = sess.Values["name"]
+	// User ID from path `users/:id`
+	id := c.Param("id") // TODO home or catigory.html ?
+	productId, _ := strconv.Atoi(id)
+
+	data["product"], err = getProduct(productId)
+	if err != nil {
+		fmt.Println("with gitCatigories: ", err)
+	}
+	//fmt.Println("product form handle : ", data["product"])
+    return c.Render(http.StatusOK, "product.html", data)
+    */
+
+}
+
 
 // delete product
 func deleteProd(c echo.Context) error {
     // TODO we need checkout sesston ?
-    //TODO duble querye to db is not effecien. we need ajax here.
+    
     id := c.Param("id")
     fmt.Println("id is ", id)
     i, _ := strconv.Atoi(id)
@@ -28,8 +74,8 @@ func deleteProd(c echo.Context) error {
         fmt.Println(err)
         return nil
     }
-    //return c.Redirect(303, "/mystore")
     
+    // return string to ajax resever 
     return c.String(http.StatusOK, "success!") 
 }
 
@@ -47,7 +93,6 @@ func myStores(c echo.Context) error { // TODO rename to myproduct ??
     email := sess.Values["email"]
 	data["name"] = name // from session or from memcach ?
     data["email"] = email // from session or from memcach ?
-
 
     data["products"] = myProducts(email.(string))
 
@@ -69,11 +114,9 @@ func home(c echo.Context) error {
 
 // TODO redirect to latest page after login.
 func getOneProd(c echo.Context) error {
-	// TODO whish is beter all data of product or jast photo ?
 	data := make(map[string]interface{})
-	sess, _ := session.Get("session", c)
-	data["name"] = sess.Values["name"]
-	// User ID from path `users/:id`
+	
+    // User ID from path `users/:id`
 	id := c.Param("id") // TODO home or catigory.html ?
 	productId, _ := strconv.Atoi(id)
 
@@ -81,7 +124,6 @@ func getOneProd(c echo.Context) error {
 	if err != nil {
 		fmt.Println("with gitCatigories: ", err)
 	}
-	//fmt.Println("product form handle : ", data["product"])
     return c.Render(http.StatusOK, "product.html", data)
 }
 
@@ -298,4 +340,4 @@ func customHTTPErrorHandler(err error, c echo.Context) {
 }
 
 
-
+// TODO url := c.Request().URL  we need change url path ? example /cats/ to /cats

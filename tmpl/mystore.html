@@ -8,29 +8,38 @@
 <div class=center>
     <h1>My Products</h1>    
     <h2>{{.name}}</h2>    
+
     
-    <h2> {{.email}}</h2>
-    
+    {{if not .products }} you dont have any product yet {{end}}
     {{range .products}}
     <div id="id{{.Id}}" class=card>
 
-        <h3>{{.Title}}</h3>
-        <h3>{{.Photo}}</h3>
+        <h5>{{.Title}}</h5>
+        <h5>{{.Photo}}</h5>
+        <h5>{{.Price}}</h5>
+        <h5>{{.Description}}</h5>
 
         <div dir=rtl>
-            <button href=/update/{{.Id}}> Edit </button>
-            <button onclick=deleteProduct({{.Id}})> Delete </button>
+            <!--<a href=/update/{{.Id}}> Edit </a>-->
+
+            <button onclick=deleteProd({{.Id}})> Delete </button>
+            <button onclick=editeProd({{.Id}})> Edit </button>
         </div>
     </div>
     {{end}}
 
-    <p>search for product</p>
 </div>
 
 </div>
 
 <script>
-function deleteProduct(id) {
+function editeProd(id) {
+window.location.replace("http://localhost:8080/update/"+id)
+}
+
+
+
+function deleteProd(id) {
     //var txt;
     if (confirm("ARE YOU SURE you wanna delete item no "+id)) {
         //TODO duble querye to db is not effecien. we need ajax here.
@@ -52,8 +61,6 @@ function ajaxDelete(id) {
         if(this.readyState === 4 && this.status === 200) {
             // Inserting the response from server into an HTML element
             // TODO show sucssesfull flush message
-            document.querySelector("p").innerText = "sucssesfull" ;
-            
             document.querySelector("#id"+id).outerHTML = '<h4>deleteing this product sucssesfull </h4>' ;
 
         } // TODO handle error
