@@ -14,13 +14,13 @@
     <a href="/others">others</a>
 </div>
 
-        <div class="catigories">
+    <div class="catigories">
         {{range .subCatigories}}
         <a class=chip-cat>{{.}}</a>
         {{end}}
-        </div>
-
-        {{if not .products}}<h1 class=cor> Nothing to show </h1> {{end}}
+   </div>
+   <div class=cor> 
+        {{if not .products}}Nothing to show{{end}}
 
     {{ range .products }} 
     <a href="product/{{.Id}}">
@@ -30,7 +30,7 @@
         {{if .Photo}}
         <img src="/fs/{{.Photo }}" />
         {{else}} 
-        <p> No Photo for this product </p> 
+        <p> No Photo for this product </p>
         {{end}} 
     </div>
     </a>
@@ -38,6 +38,7 @@
 </div>
 
 <div class="footer">this is a awsome footer</div>
+</div>
 </body>
 <style>
 .chip-cat {

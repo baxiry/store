@@ -6,7 +6,11 @@
 <div class=center>
     <br><br><br><br>
     <form action="/update/{{.product.Id}}" method="post" enctype="multipart/form-data">
+        
+
+        <p>id:{{.product.Id}}</p>
         <p>title:</p>
+
         <input type="text" name=title placeholder="title" value={{.product.Title}}><br><br>
         <p:>catigory: </p>
         <select name="catigory">

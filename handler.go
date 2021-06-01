@@ -12,16 +12,21 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-var currentPage string
 func updateProd(c echo.Context) error {
-	// TODO whish is beter all data of product or jast photo ?
-	
-	//id := c.Param("id") 
-    //productId, _ := strconv.Atoi(id)
+    // TODO  separate edit photos
+
+	pid := c.Param("id") 
+    id, err := strconv.Atoi(pid)
+    if err != nil {fmt.Println("id error", err)}
+
     title := c.FormValue("title")
-    fmt.Println("data prod : ", title)
-
-
+    catig := c.FormValue("catigory")
+    descr := c.FormValue("description")
+    price := c.FormValue("price")
+    photos := c.FormValue("files")
+    
+    fmt.Println("title:", title,"catigoty:", catig, "desc:", descr,"price: ", price, "photos: ", photos, "id", id)
+    
     return c.Redirect(http.StatusSeeOther, "/mystore")
 }
 
@@ -35,12 +40,11 @@ func updateProdPage(c echo.Context) error {
 	id := c.Param("id") // TODO home or catigory.html ?
 	productId, _ := strconv.Atoi(id)
 
+    fmt.Println("product id from url Param: ", productId)
 	data["product"] , err = getProduct(productId)
     if err != nil {
         fmt.Println(err)
     }
-    fmt.Println(data["product"])
-    fmt.Println("product form handle : ", data["product"])
     return c.Render(http.StatusOK, "updateProd.html", data)
 }
 

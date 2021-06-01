@@ -23,6 +23,26 @@ type Product struct {
 	Price       string
 }
 
+
+func updateProduct(title, catig, descr, price, photos string, id int) error {
+    
+    //Update db
+    stmt, err := db.Prepare("update  stores.products set  title=?  catig=? descr=?  price=?  photos=? where id=?")
+    if err != nil {return err}
+    defer stmt.Close()
+     
+    // execute
+    res, err := stmt.Exec(title, catig, descr, price, photos, id)
+    if err != nil {return err}
+     
+    a, err := res.RowsAffected()
+    if err != nil {return err}
+     
+    fmt.Println(a)   // 1 
+    return nil
+}
+
+
 // delete Producte.
 func deleteProducte(id int) error {
     res, err := db.Exec("DELETE FROM stores.products WHERE id=?", id)
@@ -58,9 +78,7 @@ func myProducts(owner string) []Product {
             fmt.Println("At myPorducts", err)
         }                                                                                                         
 
-        if p.Photo == "" {
-            fmt.Println("no fotots")
-        }
+        //if p.Photo == "" {fmt.Println("no fotots") }
         products = append(products, p)                                                                            
                                                                                                                   
     }                                                                                                             
@@ -77,12 +95,10 @@ func getProduct(id int) (Product, error) {
 		return p, err
 	}
 
-	// why not shold not close this connection ?
-
 	list := strings.Split(picts, "];[")
 	// TODO split return 2 item in some casess, is this a bug ?
 	p.Photos = filter(list)
-	//fmt.Println("product form db : ", p)
+    p.Id = id
 	return p, nil
 }
 
