@@ -58,13 +58,14 @@ func myProducts(owner string) []Product {
             fmt.Println("At myPorducts", err)
         }                                                                                                         
 
+        if p.Photo == "" {
+            fmt.Println("no fotots")
+        }
         products = append(products, p)                                                                            
                                                                                                                   
     }                                                                                                             
-    return products                                                                                          
-}                      
-
-
+    return products
+}
 
 func getProduct(id int) (Product, error) {
 	var p Product

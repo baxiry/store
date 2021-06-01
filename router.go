@@ -24,7 +24,7 @@ func templ() *Template {
 	}
 	files := []string{
         p + "tmpl/home.html", p + "tmpl/acount.html", p + "tmpl/login.html", p + "tmpl/sign.html",
-        p+"tmpl/updateProd.html",
+        p + "tmpl/404.html", p + "tmpl/updateProd.html",
         p + "tmpl/stores.html",p + "tmpl/mystore.html", p + "tmpl/notfound.html",
 		p + "tmpl/upload.html", p + "tmpl/product.html", p + "tmpl/products.html",
         p + "tmpl/part/header.html", p + "tmpl/part/footer.html",

@@ -35,30 +35,13 @@ func updateProdPage(c echo.Context) error {
 	id := c.Param("id") // TODO home or catigory.html ?
 	productId, _ := strconv.Atoi(id)
 
-	data["product"], err = getProduct(productId)
-	if err != nil {
-		fmt.Println("with gitCatigories: ", err)
-	}
+	data["product"] , err = getProduct(productId)
+    if err != nil {
+        fmt.Println(err)
+    }
+    fmt.Println(data["product"])
     fmt.Println("product form handle : ", data["product"])
     return c.Render(http.StatusOK, "updateProd.html", data)
-
-/*
-    // TODO whish is beter all data of product or jast photo ?
-	data := make(map[string]interface{})
-	sess, _ := session.Get("session", c)
-	data["name"] = sess.Values["name"]
-	// User ID from path `users/:id`
-	id := c.Param("id") // TODO home or catigory.html ?
-	productId, _ := strconv.Atoi(id)
-
-	data["product"], err = getProduct(productId)
-	if err != nil {
-		fmt.Println("with gitCatigories: ", err)
-	}
-	//fmt.Println("product form handle : ", data["product"])
-    return c.Render(http.StatusOK, "product.html", data)
-    */
-
 }
 
 
@@ -95,6 +78,9 @@ func myStores(c echo.Context) error { // TODO rename to myproduct ??
     data["email"] = email // from session or from memcach ?
 
     data["products"] = myProducts(email.(string))
+    if err != nil {
+        fmt.Println("err in product", err)
+    }
 
     return c.Render(200, "mystore.html", data)
 }

@@ -27,7 +27,11 @@
     <div class=card>
         <h3>{{.Title}}</h3>
         <p><b>Price:</b> {{.Price}} </p>
+        {{if .Photo}}
         <img src="/fs/{{.Photo }}" />
+        {{else}} 
+        <p> No Photo for this product </p> 
+        {{end}} 
     </div>
     </a>
     {{ end }}

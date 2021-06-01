@@ -23,9 +23,11 @@
     </div>
 
         {{ range .product.Photos }}
-<div class="card">
+        {{if not .}}
+        <div class="card">
               <img src="/fs/{{.}}" style="width:100%">
-</div>
+        </div>
+        {{end}}
         {{end}}
 </div>
 <br>
