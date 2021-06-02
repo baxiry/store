@@ -25,8 +25,12 @@ func updateProd(c echo.Context) error {
     price := c.FormValue("price")
     photos := c.FormValue("files")
     
-    fmt.Println("title:", title,"catigoty:", catig, "desc:", descr,"price: ", price, "photos: ", photos, "id", id)
-    
+    err = updateProduct(title, catig, descr, price, photos, id)
+    if err != nil {
+        // TODO send error to client with ajax
+        fmt.Println("error when update product: ", err)
+        return err
+    }
     return c.Redirect(http.StatusSeeOther, "/mystore")
 }
 
@@ -224,8 +228,6 @@ func upload(c echo.Context) error {
 	//fmt.Println("files is :", files[0].Filename)
 	picts := ""
 	for _, v := range files {
-		fmt.Println(v.Filename)
-		fmt.Println(v.Filename)
 		picts += v.Filename
 		picts += "];["
 		fmt.Println(picts)

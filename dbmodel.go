@@ -27,7 +27,7 @@ type Product struct {
 func updateProduct(title, catig, descr, price, photos string, id int) error {
     
     //Update db
-    stmt, err := db.Prepare("update  stores.products set  title=?  catig=? descr=?  price=?  photos=? where id=?")
+    stmt, err := db.Prepare("update  stores.products set  title=?,  catigory=?, description=?,  price=?,  photos=? where id=?")
     if err != nil {return err}
     defer stmt.Close()
      
