@@ -41,8 +41,8 @@ func updateProdPage(c echo.Context) error {
 	sess, _ := session.Get("session", c)
 	data["name"] = sess.Values["name"]
 	// User ID from path `users/:id`
-	id := c.Param("id") // TODO home or catigory.html ?
-	productId, _ := strconv.Atoi(id)
+	pid := c.Param("id") // TODO home or catigory.html ?
+    productId, _ := strconv.Atoi(pid)
 
     fmt.Println("product id from url Param: ", productId)
 	data["product"] , err = getProduct(productId)
@@ -81,11 +81,17 @@ func myStores(c echo.Context) error { // TODO rename to myproduct ??
     } 
     
     data := make(map[string]interface{}, 2)
-    email := sess.Values["email"]
+    userid := sess.Values["userid"]
+    fmt.Println("=====================================")
+    fmt.Println("userin", userid)
+    fmt.Println()
+    fmt.Println()
+    fmt.Println()
+    fmt.Println()
 	data["name"] = name // from session or from memcach ?
-    data["email"] = email // from session or from memcach ?
+    data["userid"] = userid // from session or from memcach ?
 
-    data["products"] = myProducts(email.(string))
+    data["products"] = myProducts(userid.(int))
     if err != nil {
         fmt.Println("err in product", err)
     }
@@ -150,7 +156,7 @@ var catigories = map[string][]string{
 	"others":    {"somthing", "another-somth", "else", "anythings"},
 }
 
-func mysess(c echo.Context, name, email string) {
+func mysess(c echo.Context, name string, userid int) {
 	sess, _ := session.Get("session", c)
 	sess.Options = &sessions.Options{
 		Path:     "/",
@@ -158,7 +164,7 @@ func mysess(c echo.Context, name, email string) {
 		HttpOnly: true, // no websocket or any thing else
 	}
 	sess.Values["name"] = name
-	sess.Values["email"] = email
+	sess.Values["userid"] = userid
 	sess.Save(c.Request(), c.Response())
 }
 
@@ -184,11 +190,11 @@ func uploadPage(c echo.Context) error {
 func login(c echo.Context) error {
 	femail := c.FormValue("email")
 	fpass := c.FormValue("password")
-	name, email, pass := getUsername(femail)
+    userid,  name, email, pass := getUsername(femail)
 
 	if pass == fpass && femail == email {
 		//userSession[email] = name
-		mysess(c, name, email)
+        mysess(c, name, userid)
 		return c.Redirect(http.StatusSeeOther, "/") // 303 code
 		// TODO redirect to latest page
 	}
@@ -211,8 +217,8 @@ func signup(c echo.Context) error {
 func upload(c echo.Context) error {
 	// TODO: how upload this ?.  definde uploader by session
 	sess, _ := session.Get("session", c)
-	email := sess.Values["email"]
-	fmt.Println("email of owner session", email)
+    ownerid := sess.Values["userid"]
+    fmt.Println("userid of owner session", ownerid)
 
 	title := c.FormValue("title")
 	catigory := c.FormValue("catigory")
@@ -234,7 +240,8 @@ func upload(c echo.Context) error {
 		// TODO Rename pictures.
 	}
 
-	err = insertProduct(email.(string), title, catigory, details, picts, price)
+    err = insertProduct( title, catigory, details, picts, ownerid.(int), price)
+
 	if err != nil {
 		fmt.Println("error in insert product", err)
 	}

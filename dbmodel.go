@@ -61,10 +61,10 @@ func deleteProducte(id int) error {
 }
 
 
-func myProducts(owner string) []Product {                                                           
-    rows, err := db.Query("select id, title, description, photos, price from stores.products where owner = ?", owner)                      
+func myProducts(ownerid int) []Product {                                                           
+    rows, err := db.Query("select id, title, description, photos, price from stores.products where ownerid = ?", ownerid)                      
     if err != nil {                                                                             
-        fmt.Println(err)                                                                        
+        fmt.Println("at query func owner id db select ", err)                                                                        
     }                                                                                           
     defer rows.Close() // ??
                                                                                                 
@@ -75,9 +75,8 @@ func myProducts(owner string) []Product {
     for rows.Next() {                                                                            
         err = rows.Scan(&p.Id, &p.Title, &p.Description, &p.Photo, &p.Price)                    
         if err != nil {                                                                                                         
-            fmt.Println("At myPorducts", err)
+            fmt.Println("At myPorducts scan func", err)
         }                                                                                                         
-
         //if p.Photo == "" {fmt.Println("no fotots") }
         products = append(products, p)                                                                            
                                                                                                                   
@@ -126,10 +125,10 @@ func getProductes(catigory string) ([]Product, error) {
 	return items, nil
 }
 
-func insertProduct(owner, title, catigory, details, picts string, price int) error {
+func insertProduct( title, catigory, details, picts string, ownerid, price int) error {
 	insert, err := db.Query(
-		"INSERT INTO stores.products(owner, title, catigory, description, price, photos) VALUES ( ?, ?, ?, ?, ?, ?)",
-        owner, title, catigory, details, price, picts)
+        "INSERT INTO stores.products(ownerid, title, catigory, description, price, photos) VALUES ( ?, ?, ?, ?, ?, ?)",
+        ownerid,  title, catigory, details,  price, picts)
 	// if there is an error inserting, handle it
 	if err != nil {
 		return err
@@ -141,15 +140,16 @@ func insertProduct(owner, title, catigory, details, picts string, price int) err
 }
 
 // get all username
-func getUsername(femail string) (string, string, string) {
+func getUsername(femail string) (int, string, string, string) {
 	var name, email, password string
+    var userid int
 	err := db.QueryRow(
-		"SELECT username, email, password FROM stores.users WHERE email = ?",
-		femail).Scan(&name, &email, &password)
+		"SELECT id, username, email, password FROM stores.users WHERE email = ?",
+        femail).Scan(&userid, &name, &email, &password)
 	if err != nil {
 		fmt.Println("no result or", err.Error())
 	}
-	return name, email, password
+    return userid, name, email, password
 }
 
 func insertUser(user, pass, email, phon string) error {
