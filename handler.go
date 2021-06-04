@@ -11,6 +11,8 @@ import (
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 )
+
+// updateFotos updates photos of products
 func updateFotos(c echo.Context) error {
 
 	pid := c.Param("id") 
@@ -67,6 +69,8 @@ func updateFotos(c echo.Context) error {
 }
 
 // TODO redirect to latest page after login.
+
+// updateFotosPage router fo update Fotos Page
 func updateFotosPage(c echo.Context) error {
 	data := make(map[string]interface{})
     sess, _ := session.Get("session", c) // TODO i need session ?
@@ -183,14 +187,20 @@ func home(c echo.Context) error {
 
 // TODO redirect to latest page after login.
 func getOneProd(c echo.Context) error {
-	data := make(map[string]interface{})
 	
+    data := make(map[string]interface{})
+    
+    sess, _ := session.Get("session", c)
+	name := sess.Values["name"]
+    
     // User ID from path `users/:id`
 	id := c.Param("id") // TODO home or catigory.html ?
 	productId, _ := strconv.Atoi(id)
 
+    data["name"] = name
 	data["product"], err = getProduct(productId)
-	if err != nil {
+
+    if err != nil {
 		fmt.Println("with gitCatigories: ", err)
 	}
     fmt.Println("get one product function : ", data["product"])

@@ -22,13 +22,13 @@
         <p><b>Price:</b>   {{.product.Price}}</p>
     </div>
 
+        <div class="card">
         {{ range .product.Photos }}
         {{if .}}
-        <div class="card">
               <img src="/fs/{{.}}" style="width:100%">
+        {{end}}
+        {{end}}
         </div>
-        {{end}}
-        {{end}}
 </div>
 <br>
 
