@@ -11,6 +11,78 @@ import (
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 )
+func updateFotos(c echo.Context) error {
+
+	pid := c.Param("id") 
+    id, err := strconv.Atoi(pid)
+    if err != nil {fmt.Println("id error", err)}
+
+    fotos := c.FormValue("files")
+    fmt.Println("Fotos name is : ", fotos)
+
+
+    // from her : 
+    form, err := c.MultipartForm()
+	if err != nil {
+		return err
+	}
+
+	files := form.File["files"]
+	//fmt.Println("files is :", files[0].Filename)
+	picts := ""
+	for _, v := range files {
+		picts += v.Filename
+		picts += "];["
+		// TODO Rename pictures.
+	}
+	fmt.Println(picts)
+
+    err = updateProductFotos(picts, id)
+   // err = insertProduct( title, catigory, details, picts, ownerid.(int), price)
+
+	if err != nil {
+		fmt.Println("error in insert product", err)
+	}
+
+	for _, file := range files {
+		// Source
+		src, err := file.Open()
+		if err != nil {
+			return err
+		}
+		defer src.Close()
+		// Destination
+		dst, err := os.Create(photoFold() + file.Filename)
+		if err != nil {
+			return err
+		}
+		defer dst.Close()
+		// Copy
+		if _, err = io.Copy(dst, src); err != nil {
+			return err
+		}
+	}
+
+    return c.Redirect(http.StatusSeeOther, "/mystore")
+}
+
+// TODO redirect to latest page after login.
+func updateFotosPage(c echo.Context) error {
+	data := make(map[string]interface{})
+    sess, _ := session.Get("session", c) // TODO i need session ?
+    data["name"] = sess.Values["name"] // TODO use user id instead name
+	
+    pid := c.Param("id") 
+    productId, _ := strconv.Atoi(pid)
+
+    data["productFotos"] , err = getProductFotos(productId)
+    data["id"] = productId
+    fmt.Printf("%#v", data["product"])
+    if err != nil {
+        fmt.Println(err)
+    }
+    return c.Render(http.StatusOK, "updatefotos.html", data)
+}
 
 func updateProd(c echo.Context) error {
     // TODO  separate edit photos
@@ -84,11 +156,7 @@ func myStores(c echo.Context) error { // TODO rename to myproduct ??
     data := make(map[string]interface{}, 2)
     userid := sess.Values["userid"]
     fmt.Println("=====================================")
-    fmt.Println("userin", userid)
-    fmt.Println()
-    fmt.Println()
-    fmt.Println()
-    fmt.Println()
+    fmt.Println("user Id ", userid)
 	data["name"] = name // from session or from memcach ?
     data["userid"] = userid // from session or from memcach ?
 
@@ -125,6 +193,7 @@ func getOneProd(c echo.Context) error {
 	if err != nil {
 		fmt.Println("with gitCatigories: ", err)
 	}
+    fmt.Println("get one product function : ", data["product"])
     return c.Render(http.StatusOK, "product.html", data)
 }
 
@@ -169,57 +238,11 @@ func mysess(c echo.Context, name string, userid int) {
 	sess.Save(c.Request(), c.Response())
 }
 
-// upload photos
-func uploadPage(c echo.Context) error {
-	data := make(map[string]interface{}, 3)
-	sess, err := session.Get("session", c)
-	if err != nil {
-		fmt.Println("erro upload session is : ", err)
-	}
-	email := sess.Values["email"]
-	name := sess.Values["name"]
-	data["name"] = name
-	if email == nil {
-		// TODO flash here
-
-		return c.Redirect(http.StatusSeeOther, "/login") // 303 code
-	}
-	// c.Response().Status
-	return c.Render(200, "upload.html", data)
-}
-
-func login(c echo.Context) error {
-	femail := c.FormValue("email")
-	fpass := c.FormValue("password")
-    userid,  name, email, pass := getUsername(femail)
-
-	if pass == fpass && femail == email {
-		//userSession[email] = name
-        mysess(c, name, userid)
-		return c.Redirect(http.StatusSeeOther, "/") // 303 code
-		// TODO redirect to latest page
-	}
-	return c.Render(200, "login.html", "Username or password is wrong")
-}
-
-func signup(c echo.Context) error {
-	name := c.FormValue("username")
-	pass := c.FormValue("password")
-	email := c.FormValue("email")
-	phon := c.FormValue("phon")
-	err := insertUser(name, pass, email, phon)
-	if err != nil {
-		//fmt.Println(err)
-		return c.Render(200, "sign.html", "wrrone")
-	}
-	return c.Redirect(http.StatusSeeOther, "/login") // 303 code
-}
-
+// upload uploads new product
 func upload(c echo.Context) error {
 	// TODO: how upload this ?.  definde uploader by session
 	sess, _ := session.Get("session", c)
     ownerid := sess.Values["userid"]
-    fmt.Println("userid of owner session", ownerid)
 
 	title := c.FormValue("title")
 	catigory := c.FormValue("catigory")
@@ -273,6 +296,51 @@ func upload(c echo.Context) error {
 	//	return nil
 	//}
     //return nil
+}
+
+// upload photos
+func uploadPage(c echo.Context) error {
+	data := make(map[string]interface{}, 3)
+	sess, err := session.Get("session", c)
+	if err != nil {
+		fmt.Println("erro upload session is : ", err)
+	}
+    userid := sess.Values["userid"]
+	name := sess.Values["name"]
+	data["name"] = name
+    if userid == nil {
+		// TODO flash here
+		return c.Redirect(http.StatusSeeOther, "/login") // 303 code
+	}
+	// c.Response().Status
+	return c.Render(200, "upload.html", data)
+}
+
+func login(c echo.Context) error {
+	femail := c.FormValue("email")
+	fpass := c.FormValue("password")
+    userid,  name, email, pass := getUsername(femail)
+
+	if pass == fpass && femail == email {
+		//userSession[email] = name
+        mysess(c, name, userid)
+		return c.Redirect(http.StatusSeeOther, "/") // 303 code
+		// TODO redirect to latest page
+	}
+	return c.Render(200, "login.html", "Username or password is wrong")
+}
+
+func signup(c echo.Context) error {
+	name := c.FormValue("username")
+	pass := c.FormValue("password")
+	email := c.FormValue("email")
+	phon := c.FormValue("phon")
+	err := insertUser(name, pass, email, phon)
+	if err != nil {
+		//fmt.Println(err)
+		return c.Render(200, "sign.html", "wrrone")
+	}
+	return c.Redirect(http.StatusSeeOther, "/login") // 303 code
 }
 
 func signPage(c echo.Context) error {

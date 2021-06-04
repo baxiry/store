@@ -24,6 +24,41 @@ type Product struct {
 	Price       string
 }
 
+func getProductFotos(id int) ([]string, error) {
+    fotos := make([]string, 1)
+    var picts string
+	
+    err := db.QueryRow(
+        "SELECT photos FROM stores.products WHERE id = ?",
+        id).Scan(&picts)
+	if err != nil {
+        return nil, err
+	}
+
+	list := strings.Split(picts, "];[")
+	// TODO split return 2 item in some casess, is this a bug ?
+    fotos = filter(list)
+    return fotos, nil
+}
+
+func updateProductFotos(photos string, id int) error {
+    
+    //Update db
+    stmt, err := db.Prepare("update  stores.products set photos=? where id=?")
+    if err != nil {return err}
+    defer stmt.Close()
+     
+    // execute
+    res, err := stmt.Exec(photos, id)
+    if err != nil {return err}
+     
+    a, err := res.RowsAffected()
+    if err != nil {return err}
+     
+    fmt.Println("efected foto update: ", a)   // 1 
+    return nil
+}
+
 
 func updateProduct(title, catig, descr, price, photos string, id int) error {
     
@@ -91,11 +126,12 @@ func getProduct(id int) (Product, error) {
 	err := db.QueryRow(
         "SELECT title, catigory, description, photos, price FROM stores.products WHERE id = ?",
         id).Scan(&p.Title, &p.Catigory, &p.Description, &picts, &p.Price)
-	if err != nil {
+        if err != nil {
 		return p, err
 	}
 
-	list := strings.Split(picts, "];[")
+    list := strings.Split(picts, "];[")
+    fmt.Println("list fotos is :", list)
 	// TODO split return 2 item in some casess, is this a bug ?
 	p.Photos = filter(list)
     p.Id = id

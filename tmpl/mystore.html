@@ -24,6 +24,7 @@
 
             <button onclick=deleteProd({{.Id}})> Delete </button>
             <button onclick=editeProd({{.Id}})> Edit </button>
+            <button onclick=editeFotos({{.Id}})> Edit Photos </button>
         </div>
     </div>
     {{end}}
@@ -37,6 +38,9 @@ function editeProd(id) {
 window.location.replace("http://localhost:8080/update/"+id)
 }
 
+function editeFotos(id) {
+window.location.replace("http://localhost:8080/updatefotos/"+id)
+}
 
 
 function deleteProd(id) {

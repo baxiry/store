@@ -6,14 +6,12 @@
 <div class=center>
     <br><br><br><br>
     <form action="/update/{{.product.Id}}" method="post" enctype="multipart/form-data">
-        
-
         <p>id:{{.product.Id}}</p>
         <p>title:</p>
 
         <input type="text" name=title placeholder="title" value={{.product.Title}}><br><br>
         <p:>catigory: </p>
-        <select name="catigory" value='.product.Catigories'>
+        <select name="catigory">
             {{$catig := .product.Catigory}}
             <option value="computers"{{if eq $catig "computers"}} selected {{end}}>computers</option> 
             <option value="mobiles"  {{if eq $catig "mobiles"}} selected {{end}}>mobiles</option>
@@ -28,7 +26,6 @@
         <textarea name="description" title="write all details" placeholder="description" >{{.product.Description}}</textarea><br><br>
         <p>Price:</p>
         <input type="number" name=price placeholder="price" value='{{.product.Price}}'><br><br>
-        <p>photos:</p> <input type="file" name="files" multiple><br><br>
         <input type="submit" value="Submit">
     </form>
 </div>
