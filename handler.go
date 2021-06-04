@@ -46,6 +46,7 @@ func updateProdPage(c echo.Context) error {
 
     fmt.Println("product id from url Param: ", productId)
 	data["product"] , err = getProduct(productId)
+    fmt.Printf("%#v", data["product"])
     if err != nil {
         fmt.Println(err)
     }

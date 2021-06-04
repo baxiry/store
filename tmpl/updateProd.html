@@ -13,14 +13,15 @@
 
         <input type="text" name=title placeholder="title" value={{.product.Title}}><br><br>
         <p:>catigory: </p>
-        <select name="catigory">
-            <option value="computers">computers</option>
-            <option value="mobiles">mobiles</option>
-            <option value="motors">motors</option>
-            <option value="animals">animals</option>
-            <option value="cars">cars</option>
-            <option value="services">services</option>
-            <option value="others">others</option>
+        <select name="catigory" value='.product.Catigories'>
+            {{$catig := .product.Catigory}}
+            <option value="computers"{{if eq $catig "computers"}} selected {{end}}>computers</option> 
+            <option value="mobiles"  {{if eq $catig "mobiles"}} selected {{end}}>mobiles</option>
+            <option value="motors"   {{if eq $catig "motors"}} selected {{end}}>motors</option>
+            <option value="animals"  {{if eq $catig "animals"}} selected {{end}}>animals</option>
+            <option value="cars"     {{if eq $catig "cars"}} selected {{end}}>cars</option>
+            <option value="services" {{if eq $catig "services"}} selected {{end}}>services</option>
+            <option value="others"   {{if eq $catig "others"}} selected {{end}}>others</option>
         </select><br><br>
     
         <p>Ditails:</p>

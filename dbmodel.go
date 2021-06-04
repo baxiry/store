@@ -17,6 +17,7 @@ var (
 type Product struct {
 	Id          int
 	Title       string
+    Catigory    string
 	Description string
 	Photo       string
 	Photos      []string
@@ -88,8 +89,8 @@ func getProduct(id int) (Product, error) {
 	var p Product
 	var picts string
 	err := db.QueryRow(
-		"SELECT title, description, photos, price FROM stores.products WHERE id = ?",
-		id).Scan(&p.Title, &p.Description, &picts, &p.Price)
+        "SELECT title, catigory, description, photos, price FROM stores.products WHERE id = ?",
+        id).Scan(&p.Title, &p.Catigory, &p.Description, &picts, &p.Price)
 	if err != nil {
 		return p, err
 	}
