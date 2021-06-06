@@ -23,7 +23,7 @@ func templ() *Template {
 		p = "/root/store/"
 	}
 	files := []string{
-        p + "tmpl/home.html", p + "tmpl/acount.html", p + "tmpl/login.html", p + "tmpl/sign.html",
+        p + "tmpl/home.html",p + "tmpl/upacount.html",  p + "tmpl/acount.html", p + "tmpl/login.html", p + "tmpl/sign.html",
         p + "tmpl/404.html", p + "tmpl/updateProd.html",
         p + "tmpl/stores.html",p + "tmpl/mystore.html", p + "tmpl/notfound.html",
 		p + "tmpl/upload.html", p + "tmpl/product.html", p + "tmpl/products.html",
@@ -34,35 +34,31 @@ func templ() *Template {
 }
 
 
-/*
-//go:embed tmpl/*
-var filesEmbed embed.FS
-
-func templ() *Template {
-	files := []string{
-		"tmpl/home.html", "tmpl/acount.html", "tmpl/login.html", "tmpl/sign.html", "tmpl/stores.html", "tmpl/mystore.html",
-        "tmpl/upload.html", "tmpl/product.html", "tmpl/products.html", "tmpl/part/header.html", "tmpl/part/footer.html",
+// folder when photos is stored.
+func photoFold() string {
+	if os.Getenv("USERNAME") == "fedor" {
+		return "/home/fedor/repo/files/"
 	}
-
-    return &Template{templates: template.Must(template.ParseFS(filesEmbed, files...))}
+	return "/root/files/"
 }
 
-//go:embed assets/*
-var content embed.FS
 
-var contentHandler = echo.WrapHandler(http.FileServer(http.FS(content)))
-var contentRewrite = middleware.Rewrite(map[string]string{"/": "/static/$1"})
-var e = echo.New()
-func SetupRoutes() {
-    e.GET("/*", contentHandler, contentRewrite)
+// where assets  path ?
+func assets() string {
+	if os.Getenv("USERNAME") != "fedor" {
+		return "/root/store/assets"
+	}
+	return "assets"
 }
 
-*/
 
-//t, err := template.ParseFS(assetData, "tmpl/")
-//if err != nil {
-//		fmt.Println(err)
-//}
-
-
+var catigories = map[string][]string{
+	"cars":      {"mersides", "volswagn", "shefrole", "ford", "jarary", "jawad"},
+	"animals":   {"dogs", "sheeps", "elephens", "checkens", "lions"},
+	"motors":    {"harly", "senteroi", "basher", "hddaf", "mobilite"},
+	"mobiles":   {"sumsung", "apple", "oppo", "netro", "nokia"},
+	"computers": {"dell", "toshipa", "samsung", "hwawi", "hamed"},
+	"services":  {"penter", "developer", "cleaner", "shooter", "gamer"}, //services
+	"others":    {"somthing", "another-somth", "else", "anythings"},
+}
 

@@ -1,20 +1,10 @@
 package main
 
 import (
-	"os"
-
 	"github.com/gorilla/sessions"
 	"github.com/labstack/echo-contrib/session"
 	"github.com/labstack/echo/v4"
 )
-
-// hella
-func assets() string {
-	if os.Getenv("USERNAME") != "fedor" {
-		return "/root/store/assets"
-	}
-	return "assets"
-}
 
 func main() {
 
@@ -36,12 +26,13 @@ func main() {
 	e.Static("/fs", photoFold())
 
 	// account and verefy
-    e.GET("/", home)
+    e.GET("/", homePage)
     e.GET("/sign", signPage)
 	e.POST("/sign", signup)
 	e.GET("/login", loginPage)
 	e.POST("/login", login)
-	e.GET("/acount/:name", acount)
+    e.GET("/acount/:id", acount)
+    e.GET("/upacount",updateAcount)
     
     // store and product
     e.GET("/mystore", myStores)
@@ -53,7 +44,7 @@ func main() {
     e.POST("/update/:id", updateProd) 
 
     e.GET("/updatefotos/:id", updateFotosPage) 
-    e.POST("/updatefotos/:id", updateFotos) 
+    e.POST("/updatefotos/:id", updateProdFotos) 
 	
     e.GET("/upload", uploadPage)
 	e.POST("/upload", upload)
