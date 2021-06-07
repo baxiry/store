@@ -33,6 +33,7 @@ func main() {
 	e.POST("/login", login)
     e.GET("/acount/:id", acount)
     e.GET("/upacount",updateAcount)
+    e.POST("/upacount",updateAcountInfo)
     
     // store and product
     e.GET("/mystore", myStores)

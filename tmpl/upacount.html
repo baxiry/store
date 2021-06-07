@@ -1,13 +1,16 @@
 {{template "header.html" .}}
 <body>
     <div class='center mar'>
-        <h3>acount page</h3>
+        <h3>update acount information </h3>
 
-        <h3>name is : {{.name}}</h3>
-        <h3>id is : {{.id}}</h3>
-        <img src="/fs/fox2.jpg" >
-        <a href="/upacount">Edit acount</a>
-        <!-- <img src="/fs/{{.avatar}}" >-->
+        <img src="/fs/{{.linkavatar}}" >
+        <form action="/upacount" method=post>
+            <input type="name" value={{.name}}>
+            <input type="email" value={{.email}}>
+            <input type="phon" value={{.phon}}>
+            <input type="file" value={{.linkavatar}}>
+            <input type="submit">
+        </form>
     </div>
 </body>
 <style>

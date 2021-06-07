@@ -24,6 +24,49 @@ type Product struct {
 	Price       string
 }
 
+func updateUserInfo(name, email, phon string, uid int) error {
+
+    //Update db
+    stmt, err := db.Prepare("update  stores.users set username=?, email=?, phon=? where id=?")
+    if err != nil {return err}
+    defer stmt.Close()
+     
+    // execute
+    res, err := stmt.Exec(name, email, uid)
+    if err != nil {return err}
+     
+    a, err := res.RowsAffected()
+    if err != nil {return err}
+     
+    fmt.Println("efected foto update: ", a)   // 1 
+    return nil
+}
+// gets all user information for update this info
+func getUserInfo(userid int) ( string, string, string, string) {
+    var name, email, phon, avatar string
+	err := db.QueryRow(
+        "SELECT username, email,phon, linkavatar FROM stores.users WHERE id = ?",
+        userid).Scan(&name, &email,&phon, &avatar)
+	if err != nil {
+		fmt.Println("no result or", err.Error())
+	}
+    return name, email, phon, avatar
+}
+
+// get all username
+func getUsername(femail string) (int, string, string, string) {
+	var name, email, password string
+    var userid int
+	err := db.QueryRow(
+		"SELECT id, username, email, password FROM stores.users WHERE email = ?",
+        femail).Scan(&userid, &name, &email, &password)
+	if err != nil {
+		fmt.Println("no result or", err.Error())
+	}
+    return userid, name, email, password
+}
+
+
 func getProductFotos(id int) ([]string, error) {
     fotos := make([]string, 1)
     var picts string
@@ -174,19 +217,6 @@ func insertProduct( title, catigory, details, picts string, ownerid, price int) 
 	defer insert.Close() // TODO why we need closeing this connection ?
     
 	return nil
-}
-
-// get all username
-func getUsername(femail string) (int, string, string, string) {
-	var name, email, password string
-    var userid int
-	err := db.QueryRow(
-		"SELECT id, username, email, password FROM stores.users WHERE email = ?",
-        femail).Scan(&userid, &name, &email, &password)
-	if err != nil {
-		fmt.Println("no result or", err.Error())
-	}
-    return userid, name, email, password
 }
 
 func insertUser(user, pass, email, phon string) error {
