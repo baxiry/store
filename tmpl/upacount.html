@@ -5,10 +5,10 @@
 
         <img src="/fs/{{.linkavatar}}" >
         <form action="/upacount" method=post>
-            <input type="name" value={{.name}}>
-            <input type="email" value={{.email}}>
-            <input type="phon" value={{.phon}}>
-            <input type="file" value={{.linkavatar}}>
+            <input type="name" name=name value={{.name}}>
+            <input type="email" name=email value={{.email}}>
+            <input type="phon" name=phon value={{.phon}}>
+            <!--<input type="file" name=files value={{.linkavatar}}>-->
             <input type="submit">
         </form>
     </div>

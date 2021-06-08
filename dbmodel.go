@@ -32,7 +32,7 @@ func updateUserInfo(name, email, phon string, uid int) error {
     defer stmt.Close()
      
     // execute
-    res, err := stmt.Exec(name, email, uid)
+    res, err := stmt.Exec(name, email, phon, uid)
     if err != nil {return err}
      
     a, err := res.RowsAffected()

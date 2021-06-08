@@ -23,14 +23,20 @@ func updateAcountInfo(c echo.Context) error {
     name := c.FormValue("name")
     email := c.FormValue("email")
     phon := c.FormValue("phon")
+    fmt.Println("name+email+phon is :", name, email, phon)
 
     err := updateUserInfo(name, email, phon, uid.(int))
     if err != nil {
         fmt.Println("error at update db function", err)
     }
-    // redirect to acoun page
 
+    // update session information
+    mysess(c, name, uid.(int))
+    
+    // redirect to acoun page
     userid := strconv.Itoa(uid.(int))
+    
+    
     return c.Redirect(303, "/acount/"+userid)
 }
 

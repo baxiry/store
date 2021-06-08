@@ -93,7 +93,7 @@ func uploadPage(c echo.Context) error {
 	return c.Render(200, "upload.html", data)
 }
 
-
+/* TODO handle error
 func customHTTPErrorHandler(err error, c echo.Context) {
 	code := http.StatusInternalServerError
 	if he, ok := err.(*echo.HTTPError); ok {
@@ -108,4 +108,5 @@ func customHTTPErrorHandler(err error, c echo.Context) {
     c.Redirect(http.StatusSeeOther, "/notfound") // 303 code
     return
 }
+*/
 

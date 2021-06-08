@@ -14,7 +14,7 @@ func main() {
     e := echo.New()
     //SetupRoutes()
     //e.GET("/a", contentHandler, contentRewrite)
-    e.HTTPErrorHandler = customHTTPErrorHandler
+    //e.HTTPErrorHandler = customHTTPErrorHandler
     
     // TODO store secret key in envrenment
 	e.Use(session.Middleware(sessions.NewCookieStore([]byte("secret"))))
