@@ -13,10 +13,8 @@ import (
 
 // updateFotos updates photos of products
 func updateProdFotos(c echo.Context) error {
-
-    //uid := sess.Values["userid"]
-    //data["id"] = uid
-	pid := c.Param("id") 
+	
+    pid := c.Param("id") 
     id, err := strconv.Atoi(pid)
     if err != nil {fmt.Println("id error", err)}
 
@@ -68,6 +66,7 @@ func updateProdFotos(c echo.Context) error {
 
 func updateProd(c echo.Context) error {
     // TODO  separate edit photos
+
 
 	pid := c.Param("id") 
     id, err := strconv.Atoi(pid)
@@ -123,7 +122,7 @@ func myStores(c echo.Context) error { // TODO rename to myproduct ??
 		return c.Redirect(http.StatusSeeOther, "/login") // 303 code
     } 
     
-    data := make(map[string]interface{}, 2)
+    data := make(map[string]interface{}, 3)
     userid := sess.Values["userid"]
 	data["name"] = name // from session or from memcach ?
     data["userid"] = userid // from session or from memcach ?
@@ -144,18 +143,19 @@ func getOneProd(c echo.Context) error {
     
     sess, _ := session.Get("session", c)
 	name := sess.Values["name"]
+	userid := sess.Values["userid"]
     
     // User ID from path `users/:id`
 	id := c.Param("id") // TODO home or catigory.html ?
 	productId, _ := strconv.Atoi(id)
 
     data["name"] = name
+    data["userid"] = userid
 	data["product"], err = getProduct(productId)
 
     if err != nil {
 		fmt.Println("with gitCatigories: ", err)
 	}
-    fmt.Println("get one product function : ", data["product"])
     return c.Render(http.StatusOK, "product.html", data)
 }
 
@@ -169,7 +169,7 @@ func getProds(c echo.Context) error {
     catigory := c.Param("catigory") // TODO home or catigory.html ?
 
 	data["name"] = sess.Values["name"]
-    data["id"] = uid
+    data["userid"] = uid
     data["subCatigories"] =  catigories[catigory] // from router.go
     data["products"], _ = getProductes(catigory)
 	
@@ -249,7 +249,7 @@ func stores(c echo.Context) error {
 	name := sess.Values["name"]
 
 	data["name"] = name // from session or from memcach ?
-    data["id"] = uid
+    data["userid"] = uid
     return c.Render(200, "stores.html", data)
 }
 

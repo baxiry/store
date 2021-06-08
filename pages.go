@@ -32,7 +32,7 @@ func homePage(c echo.Context) error {
 
 	data := make(map[string]interface{}, 3)
 	data["name"] = name
-    data["id"] = uid
+    data["userid"] = uid
 	data["catigories"] = catigories
     return c.Render(http.StatusOK, "home.html", data)
 }
@@ -47,7 +47,7 @@ func updateFotosPage(c echo.Context) error {
     productId, _ := strconv.Atoi(pid)
 
     data["productFotos"] , err = getProductFotos(productId)
-    data["id"] = productId
+    data["userid"] = productId
     fmt.Printf("%#v", data["product"])
     if err != nil {
         fmt.Println(err)
@@ -61,6 +61,7 @@ func updateProdPage(c echo.Context) error {
 	data := make(map[string]interface{})
 	sess, _ := session.Get("session", c)
 	data["name"] = sess.Values["name"]
+    data["userid"] = sess.Values["userid"]
 	// User ID from path `users/:id`
 	pid := c.Param("id") // TODO home or catigory.html ?
     productId, _ := strconv.Atoi(pid)
@@ -85,6 +86,7 @@ func uploadPage(c echo.Context) error {
     userid := sess.Values["userid"]
 	name := sess.Values["name"]
 	data["name"] = name
+    data["userid"] = userid
     if userid == nil {
 		// TODO flash here
 		return c.Redirect(http.StatusSeeOther, "/login") // 303 code
