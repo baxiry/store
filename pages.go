@@ -42,6 +42,10 @@ func updateFotosPage(c echo.Context) error {
 	data := make(map[string]interface{})
     sess, _ := session.Get("session", c) // TODO i need session ?
     data["name"] = sess.Values["name"] // TODO use user id instead name
+    if data["name"] == nil {
+        fmt.Println("session name is nil redirect to login")
+        c.Redirect(303, "/login")
+    }
 	
     pid := c.Param("id") 
     productId, _ := strconv.Atoi(pid)
