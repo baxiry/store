@@ -8,28 +8,30 @@ CREATE TABLE users (
     primary key (id)
 );
 
-CREATE TABLE users ( id INT NOT NULL AUTO_INCREMENT, username varchar(30), password varchar(30), email varchar(70), phon varchar(15), linkavatar varchar(70), primary key (id));
+CREATE TABLE users (
+  id INT NOT NULL AUTO_INCREMENT, username varchar(30), password varchar(30), email varchar(70), phon varchar(15),
+  linkavatar varchar(70), primary key (id));
 
 CREATE TABLE products (id INT NOT NULL AUTO_INCREMENT, title varchar(150), photos varchar(1000), ts TIMESTAMP,primary key (id));
 
-// --------------- general info -----------------
+--  ------------- general info -----------------
 
-// add new column in spicial position:
+--  add new column in spicial position:
 ALTER TABLE table_name ADD new_column_name column_definition  [FIRST | AFTER column_name];
-example:
+-- example:
 ALTER TABLE products ADD description varchar(500) AFTER title;
 
-// remove table:
+-- remove table:
 DROP TABLE table_name;
 
-// remove column:
+-- remove column:
 ALTER TABLE products DROP COLUMN owner;
 
-// fix string encoding error
+-- fix string encoding error
 ALTER DATABASE <db_name> CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ALTER TABLE <table_name> CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-//
+--
 
 create table tutorials_tbl( 
 	usreid INT NOT NULL AUTO_INCREMENT,
@@ -40,7 +42,7 @@ create table tutorials_tbl(
 	PRIMARY KEY ( userid )
 );
 
-//
+
 DELETE FROM table_name
 WHERE condition;
 
