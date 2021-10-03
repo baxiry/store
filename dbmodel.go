@@ -156,7 +156,7 @@ func deleteProducte(productId int) error {
 }
 
 func myProducts(ownerid int) []Product {
-	rows, err := db.Query("select id, title, description, photos, price from stores.products where ownerid = ?", ownerid)
+	rows, err := db.Query("select productID, title, description, photos, price from stores.products where ownerid = ?", ownerid)
 	if err != nil {
 		fmt.Println("at query func owner id db select ", err)
 	}
@@ -219,9 +219,9 @@ func getProductes(catigory string) ([]Product, error) {
 	return items, nil
 }
 
-func insertProduct(title, catigory, details, picts string, ownerid, price int) error {
+func insertProduct(title, catigory, details, picts string, ownerid int, price float64) error {
 	insert, err := db.Query(
-		"INSERT INTO stores.products(ownerid, title, catigory, description, price, photos) VALUES ( ?, ?, ?, ?, ?, ?)",
+		"INSERT INTO stores.products(ownerID, title, catigory, description, price, photos) VALUES ( ?, ?, ?, ?, ?, ?)",
 		ownerid, title, catigory, details, price, picts)
 	// if there is an error inserting, handle it
 	if err != nil {

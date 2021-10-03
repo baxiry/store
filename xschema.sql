@@ -12,8 +12,22 @@ CREATE TABLE users (
   id INT NOT NULL AUTO_INCREMENT, username varchar(30), password varchar(30), email varchar(70), phon varchar(15),
   linkavatar varchar(70), primary key (id));
 
-CREATE TABLE products (id INT NOT NULL AUTO_INCREMENT, title varchar(150), photos varchar(1000), ts TIMESTAMP,primary key (id));
 
+CREATE TABLE products (
+    productID INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    ownerID INT NOT NULL, -- userID
+    title varchar(150),
+    -- productCode  CHAR(3) NOT NULL DEFAULT '',
+    price 
+    catigory
+    quantity INT UNSIGNED  NOT NULL DEFAULT 1,
+    photos varchar(1000), -- TODO splite photos as table;
+    tamestamp TIMESTAMP,
+    PRIMARY KEY (productID)
+);
+   
+CREATE TABLE products (productID INT UNSIGNED NOT NULL AUTO_INCREMENT, ownerID INT UNSIGNED  NOT NULL, title varchar(150),
+    quantity INT UNSIGNED  NOT NULL DEFAULT 1,photos varchar(1000),tamestamp TIMESTAMP,PRIMARY KEY (productID));
 --  ------------- general info -----------------
 
 --  add new column in spicial position:

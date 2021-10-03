@@ -13,13 +13,15 @@ import (
 
 // updateFotos updates photos of products
 func updateProdFotos(c echo.Context) error {
-	
-    pid := c.Param("id") 
-    id, err := strconv.Atoi(pid)
-    if err != nil {fmt.Println("id error", err)}
 
-    // from her : 
-    form, err := c.MultipartForm()
+	pid := c.Param("id")
+	id, err := strconv.Atoi(pid)
+	if err != nil {
+		fmt.Println("id error", err)
+	}
+
+	// from her :
+	form, err := c.MultipartForm()
 	if err != nil {
 		return err
 	}
@@ -33,8 +35,8 @@ func updateProdFotos(c echo.Context) error {
 		// TODO Rename pictures.
 	}
 
-    // databas function
-    err = updateProductFotos(picts, id)
+	// databas function
+	err = updateProductFotos(picts, id)
 
 	if err != nil {
 		fmt.Println("error in insert product", err)
@@ -59,104 +61,102 @@ func updateProdFotos(c echo.Context) error {
 		}
 	}
 
-    return c.Redirect(http.StatusSeeOther, "/mystore")
+	return c.Redirect(http.StatusSeeOther, "/mystore")
 }
 
 // TODO redirect to latest page after login.
 
 func updateProd(c echo.Context) error {
-    // TODO  separate edit photos
+	// TODO  separate edit photos
 
+	pid := c.Param("id")
+	id, err := strconv.Atoi(pid)
+	if err != nil {
+		fmt.Println("id error", err)
+	}
 
-	pid := c.Param("id") 
-    id, err := strconv.Atoi(pid)
-    if err != nil {fmt.Println("id error", err)}
+	title := c.FormValue("title")
+	catig := c.FormValue("catigory")
+	descr := c.FormValue("description")
+	price := c.FormValue("price")
+	photos := c.FormValue("files")
 
-    title := c.FormValue("title")
-    catig := c.FormValue("catigory")
-    descr := c.FormValue("description")
-    price := c.FormValue("price")
-    photos := c.FormValue("files")
-    
-    err = updateProduct(title, catig, descr, price, photos, id)
-    if err != nil {
-        // TODO send error to client with ajax
-        fmt.Println("error when update product: ", err)
-        return err
-    }
-    return c.Redirect(http.StatusSeeOther, "/mystore")
+	err = updateProduct(title, catig, descr, price, photos, id)
+	if err != nil {
+		// TODO send error to client with ajax
+		fmt.Println("error when update product: ", err)
+		return err
+	}
+	return c.Redirect(http.StatusSeeOther, "/mystore")
 }
-
 
 // delete product
 func deleteProd(c echo.Context) error {
-    // TODO we need checkout sesston ?
-    
-	sess, _ := session.Get("session", c)
-    ownerid := sess.Values["userid"]
-    if ownerid == nil {
-        return c.Redirect(http.StatusSeeOther, "/mystore")
-    }
+	// TODO we need checkout sesston ?
 
-    
-    id := c.Param("id")
-    fmt.Println("id is ", id)
-    i, _ := strconv.Atoi(id)
-    err = deleteProducte(i)
-    if err != nil {
-        fmt.Println(err)
-        return nil
-    }
-    
-    // return string to ajax resever 
-    return c.String(http.StatusOK, "success!") 
+	sess, _ := session.Get("session", c)
+	ownerid := sess.Values["userid"]
+	if ownerid == nil {
+		return c.Redirect(http.StatusSeeOther, "/mystore")
+	}
+
+	id := c.Param("id")
+	fmt.Println("id is ", id)
+	i, _ := strconv.Atoi(id)
+	err = deleteProducte(i)
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+
+	// return string to ajax resever
+	return c.String(http.StatusOK, "success!")
 }
 
 // perhaps is beter ignoring this feater ??!
 func myStores(c echo.Context) error { // TODO rename to myproduct ??
-    fmt.Println("at myStores function ")
+	fmt.Println("at myStores function ")
 	sess, _ := session.Get("session", c)
 	name := sess.Values["name"]
 
-    if name == nil {
+	if name == nil {
 		return c.Redirect(http.StatusSeeOther, "/login") // 303 code
-    } 
-    
-    data := make(map[string]interface{}, 3)
-    userid := sess.Values["userid"]
-	data["name"] = name // from session or from memcach ?
-    data["userid"] = userid // from session or from memcach ?
+	}
 
-    data["products"] = myProducts(userid.(int))
-    if err != nil {
-        fmt.Println("err in product", err)
-    }
+	data := make(map[string]interface{}, 3)
+	userid := sess.Values["userid"]
+	data["name"] = name     // from session or from memcach ?
+	data["userid"] = userid // from session or from memcach ?
 
-    return c.Render(200, "mystore.html", data)
+	data["products"] = myProducts(userid.(int))
+	if err != nil {
+		fmt.Println("err in product", err)
+	}
+
+	return c.Render(200, "mystore.html", data)
 }
-
 
 // TODO redirect to latest page after login.
 func getOneProd(c echo.Context) error {
-	
-    data := make(map[string]interface{})
-    
-    sess, _ := session.Get("session", c)
+
+	data := make(map[string]interface{})
+
+	sess, _ := session.Get("session", c)
 	name := sess.Values["name"]
 	userid := sess.Values["userid"]
-    
-    // User ID from path `users/:id`
+
+	// User ID from path `users/:id`
 	id := c.Param("id") // TODO home or catigory.html ?
 	productId, _ := strconv.Atoi(id)
 
-    data["name"] = name
-    data["userid"] = userid
+	data["name"] = name
+	data["userid"] = userid
 	data["product"], err = getProduct(productId)
 
-    if err != nil {
+	if err != nil {
 		fmt.Println("with gitCatigories: ", err)
 	}
-    return c.Render(http.StatusOK, "product.html", data)
+	return c.Render(http.StatusOK, "product.html", data)
 }
 
 // getProduct get all data of one product from db, and reder it
@@ -164,33 +164,43 @@ func getProds(c echo.Context) error {
 	data := make(map[string]interface{})
 
 	sess, _ := session.Get("session", c)
-    uid := sess.Values["userid"]
-	
-    catigory := c.Param("catigory") // TODO home or catigory.html ?
+	uid := sess.Values["userid"]
+
+	catigory := c.Param("catigory") // TODO home or catigory.html ?
 
 	data["name"] = sess.Values["name"]
-    data["userid"] = uid
-    data["subCatigories"] =  catigories[catigory] // from router.go
-    data["products"], _ = getProductes(catigory)
-	
-    // TODO : handle or ignore this error ?
+	data["userid"] = uid
+	data["subCatigories"] = catigories[catigory] // from router.go
+	data["products"], _ = getProductes(catigory)
+
+	// TODO : handle or ignore this error ?
 	//if err != nil {
 	//	fmt.Println("in gitCatigories: ", err)
-    //}
+	//}
 
-	return c.Render(http.StatusOK, "products.html", data)
+	err := c.Render(http.StatusOK, "products.html", data)
+	if err != nil {
+		//  template: products.html:27:23: executing "products.html" at <.Id>: can't evaluate field Id in type main.Product
+
+		fmt.Println("in gitCatigories: ", err)
+	}
+	return nil
 }
 
 // upload uploads new product
 func upload(c echo.Context) error {
 	// TODO: how upload this ?.  definde uploader by session
 	sess, _ := session.Get("session", c)
-    ownerid := sess.Values["userid"]
+	ownerid := sess.Values["userid"]
 
 	title := c.FormValue("title")
 	catigory := c.FormValue("catigory")
 	details := c.FormValue("description")
-	price, _ := strconv.Atoi(c.FormValue("price"))
+	price, e := strconv.ParseFloat(c.FormValue("price"), 32)
+	if e != nil {
+		fmt.Println("error at ParseFloat", e)
+	}
+	fmt.Printf("Type of price is : %T\n", price)
 
 	// Read files, Multipart form
 	form, err := c.MultipartForm()
@@ -207,7 +217,8 @@ func upload(c echo.Context) error {
 		// TODO Rename pictures.
 	}
 
-    err = insertProduct( title, catigory, details, picts, ownerid.(int), price)
+	//  func insertProduct(title, catigory, details, picts string, ownerid, int64, price float32) error {
+	err = insertProduct(title, catigory, details, picts, ownerid.(int), price)
 
 	if err != nil {
 		fmt.Println("error in insert product", err)
@@ -217,41 +228,44 @@ func upload(c echo.Context) error {
 		// Source
 		src, err := file.Open()
 		if err != nil {
+			fmt.Println("error at file.Open() file is :", err)
+
 			return err
 		}
 		defer src.Close()
 		// Destination
 		dst, err := os.Create(photoFold() + file.Filename)
 		if err != nil {
+			fmt.Println("error at io.Create file is :", err)
 			return err
 		}
 		defer dst.Close()
 		// Copy
 		if _, err = io.Copy(dst, src); err != nil {
+			fmt.Println("error at io.Copy file is :", err)
 			return err
 		}
 	}
-	
-    // TODO redirect to home or to acount ??
-	return c.Redirect(http.StatusSeeOther, "/") // 303 code
-	//if err != nil {
-	//	fmt.Println("redirect err", err)
-	//	return nil
-	//}
-    //return nil
+
+	// TODO redirect to home or to acount ??
+	err = c.Redirect(http.StatusSeeOther, "/") // 303 code
+	if err != nil {
+		fmt.Println("redirect err", err)
+		return nil
+	}
+	return nil
 }
 
 // perhaps is beter ignoring this feater ??!
 func stores(c echo.Context) error {
 	sess, _ := session.Get("session", c)
-    uid := sess.Values["userid"]
-    data := make(map[string]interface{}, 2)
+	uid := sess.Values["userid"]
+	data := make(map[string]interface{}, 2)
 	name := sess.Values["name"]
 
 	data["name"] = name // from session or from memcach ?
-    data["userid"] = uid
-    return c.Render(200, "stores.html", data)
+	data["userid"] = uid
+	return c.Render(200, "stores.html", data)
 }
-
 
 // TODO url := c.Request().URL  we need change url path ? example /cats/ to /cats

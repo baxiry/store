@@ -3,7 +3,6 @@ package main
 import (
 	"html/template"
 	"io"
-	"os"
 
 	"github.com/labstack/echo/v4"
 )
@@ -33,11 +32,12 @@ func templ() *Template {
 }
 
 // folder when photos is stored.
+
 func photoFold() string {
-	if os.Getenv("USERNAME") == "fedor" {
-		return "/home/fedor/repo/files/"
-	}
-	return "/root/files/"
+	//if os.Getenv("USERNAME") == "fedor" {
+	//	return "/home/fedor/repo/files/"
+	//}
+	return "../files/"
 }
 
 // where assets  path ?

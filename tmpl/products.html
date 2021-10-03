@@ -24,7 +24,7 @@
         {{if not .products}}Nothing to show{{end}}
 
     {{ range .products }} 
-    <a href="product/{{.Id}}">
+    <a href="product/{{.ProductId}}">
     <div class=card>
         <h3>{{.Title}}</h3>
         <p><b>Price:</b> {{.Price}} </p>
