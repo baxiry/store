@@ -23,7 +23,7 @@ type Product struct {
 }
 
 // select product from db
-func getProduct(productId int) (Product, error) {
+func selectProd(productId int) (Product, error) {
 	var p Product
 	var picts string
 	err := db.QueryRow(
@@ -41,21 +41,6 @@ func getProduct(productId int) (Product, error) {
 	return p, nil
 }
 
-// insert product to db
-func insertProduct(title, catigory, details, picts string, ownerid int, price float64) error {
-	insert, err := db.Query(
-		"INSERT INTO stores.products(ownerID, title, catigory, description, price, photos) VALUES ( ?, ?, ?, ?, ?, ?)",
-		ownerid, title, catigory, details, price, picts)
-	// if there is an error inserting, handle it
-	if err != nil {
-		return err
-	}
-	// be careful deferring Queries if you are using transactions
-	defer insert.Close() // TODO why we need closeing this connection ?
-
-	return nil
-}
-
 // delete Producte from db.
 func deleteProducte(productId int) error {
 	res, err := db.Exec("DELETE FROM stores.products WHERE productId=?", productId)
@@ -68,13 +53,14 @@ func deleteProducte(productId int) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println("affectedRows: ", affectedRows)
+	//fmt.Println("affectedRows: ", affectedRows)
 	// defer res // TODO I need understand this close in mariadb
 	return nil
 }
 
 // db
 func updateProduct(title, catig, descr, price, photos string, productId int) error {
+	// TODO chane price type.
 
 	//Update db
 	stmt, err := db.Prepare("update  stores.products set  title=?,  catigory=?, description=?,  price=?,  photos=? where productId=?")
@@ -95,6 +81,92 @@ func updateProduct(title, catig, descr, price, photos string, productId int) err
 	}
 
 	fmt.Println(a) // 1
+	return nil
+}
+
+// insert product to db
+func insertProduct(title, catigory, details, picts string, ownerid int, price float64) error {
+	insert, err := db.Query(
+		"INSERT INTO stores.products(ownerID, title, catigory, description, price, photos) VALUES ( ?, ?, ?, ?, ?, ?)",
+		ownerid, title, catigory, details, price, picts)
+	// if there is an error inserting, handle it
+	if err != nil {
+		return err
+	}
+	// be careful deferring Queries if you are using transactions
+	defer insert.Close() // TODO why we need closeing this connection ?
+
+	return nil
+}
+
+// upload uploads new product
+func createProduct(c echo.Context) error {
+	// TODO: how upload this ?.  definde uploader by session
+	sess, _ := session.Get("session", c)
+	ownerid := sess.Values["userid"]
+	// TODO mybe we need handle when session expired befoar appload
+
+	title := c.FormValue("title")
+	catigory := c.FormValue("catigory")
+	details := c.FormValue("description")
+	//price, e := strconv.Atoi(c.FormValue("price"))
+	price, e := strconv.ParseFloat(c.FormValue("price"), 32)
+	if e != nil {
+		fmt.Println("error at ParseFloat", e)
+	}
+	fmt.Printf("Type of price is : %T\n", price)
+
+	// Read files, Multipart form
+	form, err := c.MultipartForm()
+	if err != nil {
+		return err
+	}
+	files := form.File["files"]
+	//fmt.Println("files is :", files[0].Filename)
+	picts := ""
+	for _, v := range files {
+		picts += v.Filename
+		picts += "];["
+		fmt.Println(picts)
+		// TODO Rename pictures.
+	}
+
+	//  func insertProduct(title, catigory, details, picts string, ownerid, int64, price float32) error {
+	err = insertProduct(title, catigory, details, picts, ownerid.(int), price)
+
+	if err != nil {
+		fmt.Println("error in insert product", err)
+	}
+
+	for _, file := range files {
+		// Source
+		src, err := file.Open()
+		if err != nil {
+			fmt.Println("error at file.Open() file is :", err)
+
+			return err
+		}
+		defer src.Close()
+		// Destination
+		dst, err := os.Create(photoFold() + file.Filename)
+		if err != nil {
+			fmt.Println("error at io.Create file is :", err)
+			return err
+		}
+		defer dst.Close()
+		// Copy
+		if _, err = io.Copy(dst, src); err != nil {
+			fmt.Println("error at io.Copy file is :", err)
+			return err
+		}
+	}
+
+	// TODO redirect to home or to acount ??
+	err = c.Redirect(http.StatusSeeOther, "/") // 303 code
+	if err != nil {
+		fmt.Println("redirect err", err)
+		return nil
+	}
 	return nil
 }
 
@@ -171,19 +243,16 @@ func getOneProd(c echo.Context) error {
 
 // selecte fotos from db
 func getProductFotos(productId int) ([]string, error) {
-	fotos := make([]string, 1)
 	var picts string
-
 	err := db.QueryRow(
 		"SELECT photos FROM stores.products WHERE productId = ?",
 		productId).Scan(&picts)
 	if err != nil {
 		return nil, err
 	}
-
 	list := strings.Split(picts, "];[")
 	// TODO split return 2 item in some casess, is this a bug ?
-	fotos = filter(list)
+	fotos := filter(list)
 	return fotos, nil
 }
 
@@ -262,75 +331,6 @@ func updateProdFotos(c echo.Context) error {
 	}
 
 	return c.Redirect(http.StatusSeeOther, "/mystore")
-}
-
-// upload uploads new product
-func upload(c echo.Context) error {
-	// TODO: how upload this ?.  definde uploader by session
-	sess, _ := session.Get("session", c)
-	ownerid := sess.Values["userid"]
-
-	title := c.FormValue("title")
-	catigory := c.FormValue("catigory")
-	details := c.FormValue("description")
-	price, e := strconv.ParseFloat(c.FormValue("price"), 32)
-	if e != nil {
-		fmt.Println("error at ParseFloat", e)
-	}
-	fmt.Printf("Type of price is : %T\n", price)
-
-	// Read files, Multipart form
-	form, err := c.MultipartForm()
-	if err != nil {
-		return err
-	}
-	files := form.File["files"]
-	//fmt.Println("files is :", files[0].Filename)
-	picts := ""
-	for _, v := range files {
-		picts += v.Filename
-		picts += "];["
-		fmt.Println(picts)
-		// TODO Rename pictures.
-	}
-
-	//  func insertProduct(title, catigory, details, picts string, ownerid, int64, price float32) error {
-	err = insertProduct(title, catigory, details, picts, ownerid.(int), price)
-
-	if err != nil {
-		fmt.Println("error in insert product", err)
-	}
-
-	for _, file := range files {
-		// Source
-		src, err := file.Open()
-		if err != nil {
-			fmt.Println("error at file.Open() file is :", err)
-
-			return err
-		}
-		defer src.Close()
-		// Destination
-		dst, err := os.Create(photoFold() + file.Filename)
-		if err != nil {
-			fmt.Println("error at io.Create file is :", err)
-			return err
-		}
-		defer dst.Close()
-		// Copy
-		if _, err = io.Copy(dst, src); err != nil {
-			fmt.Println("error at io.Copy file is :", err)
-			return err
-		}
-	}
-
-	// TODO redirect to home or to acount ??
-	err = c.Redirect(http.StatusSeeOther, "/") // 303 code
-	if err != nil {
-		fmt.Println("redirect err", err)
-		return nil
-	}
-	return nil
 }
 
 // some tools

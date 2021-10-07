@@ -144,11 +144,11 @@ func acount(c echo.Context) error {
 }
 
 //
-func getUser(c echo.Context) error {
-	// User ID from path `users/:id`
-	id := c.Param("id")
-	return c.Render(http.StatusOK, "user.html", id)
-}
+//func getUser(c echo.Context) error {
+// User ID from path `users/:id`
+//id := c.Param("id")
+//return c.Render(http.StatusOK, "user.html", id)
+//}
 
 func mysess(c echo.Context, name string, userid int) {
 	sess, _ := session.Get("session", c)
