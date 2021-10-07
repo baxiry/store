@@ -10,6 +10,71 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// db
+func insertUser(user, pass, email, phon string) error {
+	insert, err := db.Query(
+		"INSERT INTO stores.users(username, password, email, phon) VALUES ( ?, ?, ?, ? )",
+		user, pass, email, phon)
+
+	// if there is an error inserting, handle it
+	if err != nil {
+		return err
+	}
+	// be careful deferring Queries if you are using transactions
+	defer insert.Close()
+	return nil
+}
+
+// gets all user information for update this info
+func getUserInfo(userid int) (string, string, string, string) {
+	var name, email, phon, avatar string
+	err := db.QueryRow(
+		"SELECT username, email,phon, linkavatar FROM stores.users WHERE userid = ?",
+		userid).Scan(&name, &email, &phon, &avatar)
+	if err != nil {
+		fmt.Println("no result or", err.Error())
+	}
+	return name, email, phon, avatar
+}
+
+// get all username
+func getUsername(femail string) (int, string, string, string) {
+	var name, email, password string
+	var userid int
+	err := db.QueryRow(
+		"SELECT userid, username, email, password FROM stores.users WHERE email = ?",
+		femail).Scan(&userid, &name, &email, &password)
+	if err != nil {
+		fmt.Println("no result or", err.Error())
+	}
+	return userid, name, email, password
+}
+
+// update user info in db
+func updateUserInfo(name, email, phon string, userid int) error {
+
+	//Update db
+	stmt, err := db.Prepare("update stores.users set username=?, email=?, phon=? where userid=?")
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	// execute
+	res, err := stmt.Exec(name, email, phon, userid)
+	if err != nil {
+		return err
+	}
+
+	a, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("efected foto update: ", a) // 1
+	return nil
+}
+
 // updateAcount updates Acount information
 func updateAcountInfo(c echo.Context) error {
 	//data := make(map[string]interface{},1)

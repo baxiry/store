@@ -1,8 +1,11 @@
 package main
 
 import (
+	"database/sql"
+	"fmt"
 	"html/template"
 	"io"
+	"os"
 
 	"github.com/labstack/echo/v4"
 )
@@ -42,10 +45,42 @@ func photoFold() string {
 
 // where assets  path ?
 func assets() string {
-	//	if os.Getenv("USERNAME") != "fedora" {
-	//		return "/root/store/assets"
-	//	}
+	home, err := os.Getwd()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	if home != "/Users/fedora/repo/store" {
+		return "/root/store/assets"
+	}
 	return "assets"
+}
+
+// init database
+var (
+	db  *sql.DB
+	err error
+)
+
+func setdb() *sql.DB {
+	db, err = sql.Open(
+		"mysql", "root:123456@tcp(127.0.0.1:3306)/?charset=utf8&parseTime=True&loc=Local")
+	if err != nil { // why no error when db is not runinig ??
+		fmt.Println("run mysql server", err)
+		// TODO report this error.
+
+		// wehen db is stoped no error is return.
+		// we expecte errore no database is runing
+
+		// my be this error is fixed with panic ping pong bellow
+	}
+
+	if err = db.Ping(); err != nil {
+		// TODO handle this error: dial tcp 127.0.0.1:3306: connect: connection refused
+		fmt.Println("mybe database is not runing or error is: ", err)
+		os.Exit(1)
+	}
+	return db
 }
 
 var catigories = map[string][]string{
