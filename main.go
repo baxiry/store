@@ -47,7 +47,7 @@ func main() {
 	e.GET("/updatefotos/:id", updateFotosPage)
 	e.POST("/updatefotos/:id", updateProdFotos)
 
-	e.GET("/upload", uploadPage)
+	e.GET("/upload", createProductPage)
 	e.POST("/upload", createProduct)
 	//e.GET("/:catigory/:id", getOneProd) // whech is beter ? :catigory or /product ?
 

@@ -10,6 +10,14 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+func signPage(c echo.Context) error {
+	return c.Render(200, "sign.html", "hello")
+}
+
+func loginPage(c echo.Context) error {
+	return c.Render(200, "login.html", "hello")
+}
+
 // db
 func insertUser(user, pass, email, phon string) error {
 	insert, err := db.Query(
