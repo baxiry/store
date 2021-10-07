@@ -23,7 +23,7 @@ type Product struct {
 }
 
 // select product from db
-func selectProd(productId int) (Product, error) {
+func selectProduct(productId int) (Product, error) {
 	var p Product
 	var picts string
 	err := db.QueryRow(
@@ -53,7 +53,7 @@ func deleteProducte(productId int) error {
 	if err != nil {
 		return err
 	}
-	//fmt.Println("affectedRows: ", affectedRows)
+	fmt.Println("affectedRows: ", affectedRows)
 	// defer res // TODO I need understand this close in mariadb
 	return nil
 }
@@ -233,7 +233,7 @@ func getOneProd(c echo.Context) error {
 
 	data["name"] = name
 	data["userid"] = userid
-	data["product"], err = getProduct(productId)
+	data["product"], err = selectProduct(productId)
 
 	if err != nil {
 		fmt.Println("with gitCatigories: ", err)

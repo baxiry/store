@@ -70,7 +70,7 @@ func updateProdPage(c echo.Context) error {
 	productId, _ := strconv.Atoi(pid)
 
 	fmt.Println("product id from url Param: ", productId)
-	data["product"], err = getProduct(productId)
+	data["product"], err = selectProduct(productId)
 	fmt.Printf("%#v", data["product"])
 	if err != nil {
 		fmt.Println(err)
