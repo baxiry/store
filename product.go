@@ -50,8 +50,8 @@ func createProductPage(c echo.Context) error {
 		fmt.Println("erro upload session is : ", err)
 	}
 	userid := sess.Values["userid"]
-	name := sess.Values["name"]
-	data["name"] = name
+	username := sess.Values["name"]
+	data["username"] = username
 	data["userid"] = userid
 	if userid == nil {
 		// TODO flash here

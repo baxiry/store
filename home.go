@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo-contrib/session"
@@ -15,15 +16,20 @@ import (
 func homePage(c echo.Context) error {
 
 	sess, _ := session.Get("session", c)
-	name := sess.Values["name"]
+	username := sess.Values["name"]
 	uid := sess.Values["userid"]
 	//fmt.Println("name is : ", name)
 
 	data := make(map[string]interface{}, 3)
-	data["name"] = name
+	data["username"] = username
 	data["userid"] = uid
 	data["catigories"] = catigories
-	return c.Render(http.StatusOK, "home.html", data)
+	err := c.Render(http.StatusOK, "home.html", data)
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	return nil
 }
 
 /* TODO handle error
