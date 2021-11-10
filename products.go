@@ -70,7 +70,7 @@ func myStores(c echo.Context) error { // TODO rename to myproduct ??
 
 	data := make(map[string]interface{}, 3)
 	userid := sess.Values["userid"]
-	data["name"] = name     // from session or from memcach ?
+	data["username"] = name // from session or from memcach ?
 	data["userid"] = userid // from session or from memcach ?
 
 	data["products"] = myProducts(userid.(int))
@@ -78,7 +78,11 @@ func myStores(c echo.Context) error { // TODO rename to myproduct ??
 		fmt.Println("err in product", err)
 	}
 
-	return c.Render(200, "mystore.html", data)
+	err := c.Render(200, "mystore.html", data)
+	if err != nil {
+		fmt.Println("error in mystore is : ", err)
+	}
+	return nil
 }
 
 // getProduct get all data of one product from db, and reder it
