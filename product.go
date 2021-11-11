@@ -33,13 +33,13 @@ func updateProdPage(c echo.Context) error {
 	pid := c.Param("id") // TODO home or catigory.html ?
 	productId, _ := strconv.Atoi(pid)
 
-	fmt.Println("product id from url Param: ", productId)
 	data["product"], err = selectProduct(productId)
-	fmt.Printf("%#v", data["product"])
+
+	err = c.Render(http.StatusOK, "updateProd.html", data)
 	if err != nil {
 		fmt.Println(err)
 	}
-	return c.Render(http.StatusOK, "updateProd.html", data)
+	return nil
 }
 
 // upload photos
@@ -109,17 +109,18 @@ func updateProduct(title, catig, descr, price, photos string, productId int) err
 	defer stmt.Close()
 
 	// execute
-	res, err := stmt.Exec(title, catig, descr, price, photos, productId)
-	if err != nil {
-		return err
-	}
+	stmt.Exec(title, catig, descr, price, photos, productId)
+	/*
+		if err != nil {
+			return err
+		}
 
-	a, err := res.RowsAffected()
-	if err != nil {
-		return err
-	}
-
-	fmt.Println(a) // 1
+			a, err := res.RowsAffected()
+			if err != nil {
+				fmt.Println("error is: ", err)
+				return err
+			}
+	*/
 	return nil
 }
 
@@ -234,7 +235,6 @@ func deleteProd(c echo.Context) error {
 
 // update Prodact
 func updateProd(c echo.Context) error {
-	// TODO  separate edit photos
 
 	pid := c.Param("id")
 	id, err := strconv.Atoi(pid)
@@ -254,7 +254,8 @@ func updateProd(c echo.Context) error {
 		fmt.Println("error when update product: ", err)
 		return err
 	}
-	return c.Redirect(http.StatusSeeOther, "/mystore")
+	err = c.Redirect(http.StatusSeeOther, "/mystore")
+	return nil
 }
 
 // TODO redirect to latest page after login.

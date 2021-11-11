@@ -1,47 +1,46 @@
 {{ template "header.html" . }}
 <body>
-<div>
-    <br>
-    <br>
-    <br>
-    
+
+<div class="container">
+
 <div class=center>
     <h1>My Products</h1>    
-    <h2>{{.name}}</h2>    
+    <h2>{{.username}}</h2>    
 
     
     {{if not .products }} you dont have any product yet {{end}}
     {{range .products}}
-    <div id="id{{.Id}}" class=card>
 
+    <div class="m-5">
+    <div id="id{{.ProductId}}" class=card>
+
+    <div class="m-5">
         <h5>{{.Title}}</h5>
         <h5>{{.Photo}}</h5>
         <h5>{{.Price}}</h5>
         <h5>{{.Description}}</h5>
 
         <div dir=rtl>
-            <!--<a href=/update/{{.Id}}> Edit </a>-->
-
-            <button onclick=deleteProd({{.Id}})> Delete </button>
-            <button onclick=editeProd({{.Id}})> Edit </button>
-            <button onclick=editeFotos({{.Id}})> Edit Photos </button>
+            <button onclick=deleteProd({{.ProductId}})> Delete </button>
+            <button onclick=editeProd({{.ProductId}})> Edit </button>
+            <button onclick=editeFotos({{.ProductId}})> Edit Photos </button>
         </div>
     </div>
+    </div>
+    </div>
     {{end}}
-
 </div>
-
 </div>
-
+</div>
 <script>
+
 function editeProd(id) {
-window.location.replace("http://localhost:8080/update/"+id)
+    window.location.replace("http://localhost:8080/update/"+id)
 }
 
 function editeFotos(id) {
 window.location.replace("http://localhost:8080/updatefotos/"+id)
 }
-
 
 function deleteProd(id) {
     //var txt;

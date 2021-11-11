@@ -1,12 +1,11 @@
 {{template "header.html" .}}
 <body>
 <!-- header is head and navbar -->
-<div class="cor">
 
-<div class=center>
+<div class=container>
     <br><br><br><br>
-    <form action="/update/{{.product.Id}}" method="post" enctype="multipart/form-data">
-        <p>id:{{.product.Id}}</p>
+    <form action="/update/{{.product.ProductId}}" method="post" enctype="multipart/form-data">
+        <p>id:{{.product.ProductId}}</p>
         <p>title:</p>
 
         <input type="text" name=title placeholder="title" value={{.product.Title}}><br><br>
@@ -28,7 +27,6 @@
         <input type="number" name=price placeholder="price" value='{{.product.Price}}'><br><br>
         <input type="submit" value="Submit">
     </form>
-</div>
 </div>
 <div class=footer> footer  copyryght 2020 </div>
 <script>
