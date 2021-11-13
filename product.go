@@ -27,7 +27,7 @@ func updateProdPage(c echo.Context) error {
 	// TODO whish is beter all data of product or jast photo ?
 	data := make(map[string]interface{})
 	sess, _ := session.Get("session", c)
-	data["name"] = sess.Values["name"]
+	data["username"] = sess.Values["name"]
 	data["userid"] = sess.Values["userid"]
 	// User ID from path `users/:id`
 	pid := c.Param("id") // TODO home or catigory.html ?
@@ -271,7 +271,7 @@ func getOneProd(c echo.Context) error {
 	id := c.Param("id") // TODO home or catigory.html ?
 	productId, _ := strconv.Atoi(id)
 
-	data["name"] = name
+	data["username"] = name
 	data["userid"] = userid
 	data["product"], err = selectProduct(productId)
 

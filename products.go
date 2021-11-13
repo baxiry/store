@@ -49,9 +49,12 @@ func myProducts(ownerid int) []Product {
 	for rows.Next() {
 		err = rows.Scan(&p.ProductId, &p.Title, &p.Description, &p.Photo, &p.Price)
 		if err != nil {
-			fmt.Println("At myPorducts scan func", err)
+			fmt.Println("err when getting Porducts from db. at rews.Next()", err)
+			return nil
 		}
-		//if p.Photo == "" {fmt.Println("no fotots") }
+		if p.Photo == "" {
+			fmt.Println("no fotots")
+		}
 		products = append(products, p)
 
 	}
@@ -94,7 +97,7 @@ func getProds(c echo.Context) error {
 
 	catigory := c.Param("catigory") // TODO home or catigory.html ?
 
-	data["name"] = sess.Values["name"]
+	data["username"] = sess.Values["name"]
 	data["userid"] = uid
 	data["subCatigories"] = catigories[catigory] // from router.go
 	data["products"], _ = getProductes(catigory)
@@ -120,7 +123,7 @@ func stores(c echo.Context) error {
 	data := make(map[string]interface{}, 2)
 	name := sess.Values["name"]
 
-	data["name"] = name // from session or from memcach ?
+	data["username"] = name // from session or from memcach ?
 	data["userid"] = uid
 	return c.Render(200, "stores.html", data)
 }

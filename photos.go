@@ -15,9 +15,9 @@ import (
 // updateFotosPage router fo update Fotos Page
 func updateFotosPage(c echo.Context) error {
 	data := make(map[string]interface{})
-	sess, _ := session.Get("session", c) // TODO i need session ?
-	data["name"] = sess.Values["name"]   // TODO use user id instead name
-	if data["name"] == nil {
+	sess, _ := session.Get("session", c)   // TODO i need session ?
+	data["username"] = sess.Values["name"] // TODO use user id instead name
+	if data["username"] == nil {
 		fmt.Println("session name is nil redirect to login")
 		c.Redirect(303, "/login")
 	}
@@ -26,12 +26,16 @@ func updateFotosPage(c echo.Context) error {
 	productId, _ := strconv.Atoi(pid)
 
 	data["productFotos"], err = getProductFotos(productId)
-	data["userid"] = productId
-	fmt.Printf("%#v", data["product"])
+	data["productId"] = productId
+	fmt.Printf("product is : %#v", data["productFotos"])
 	if err != nil {
 		fmt.Println(err)
 	}
-	return c.Render(http.StatusOK, "updatefotos.html", data)
+	err := c.Render(http.StatusOK, "updatefotos.html", data)
+	if err != nil {
+		fmt.Println("\nerr is : ", err)
+	}
+	return nil
 }
 
 // update fotos name in database
@@ -45,17 +49,11 @@ func updateProductFotos(photos string, productId int) error {
 	defer stmt.Close()
 
 	// execute
-	res, err := stmt.Exec(photos, productId)
+	_, err = stmt.Exec(photos, productId)
 	if err != nil {
 		return err
 	}
 
-	a, err := res.RowsAffected()
-	if err != nil {
-		return err
-	}
-
-	fmt.Println("efected foto update: ", a) // 1
 	return nil
 }
 
@@ -87,29 +85,36 @@ func updateProdFotos(c echo.Context) error {
 	err = updateProductFotos(picts, id)
 
 	if err != nil {
-		fmt.Println("error in insert product", err)
+		fmt.Println("error in update product foto", err)
 	}
 
 	for _, file := range files {
 		// Source
 		src, err := file.Open()
 		if err != nil {
+			fmt.Println("err in file.Open()")
 			return err
 		}
 		defer src.Close()
 		// Destination
 		dst, err := os.Create(photoFold() + file.Filename)
 		if err != nil {
+			fmt.Println("err in io.Create()")
 			return err
 		}
 		defer dst.Close()
 		// Copy
 		if _, err = io.Copy(dst, src); err != nil {
+			fmt.Println("err in io.Copy()")
 			return err
 		}
 	}
 
-	return c.Redirect(http.StatusSeeOther, "/mystore")
+	err = c.Redirect(http.StatusSeeOther, "/mystore")
+	if err != nil {
+		fmt.Println("\nerr when update product photo", err)
+	}
+	return nil
 }
 
 // selecte fotos from db
