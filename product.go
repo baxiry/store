@@ -242,13 +242,9 @@ func updateProd(c echo.Context) error {
 		fmt.Println("id error", err)
 	}
 
-	title := c.FormValue("title")
-	catig := c.FormValue("catigory")
-	descr := c.FormValue("description")
-	price := c.FormValue("price")
-	photos := c.FormValue("files")
+	err = updateProduct(c.FormValue("title"), c.FormValue("catigory"),
+		c.FormValue("description"), c.FormValue("price"), c.FormValue("files"), id)
 
-	err = updateProduct(title, catig, descr, price, photos, id)
 	if err != nil {
 		// TODO send error to client with ajax
 		fmt.Println("error when update product: ", err)

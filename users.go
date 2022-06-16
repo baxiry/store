@@ -142,7 +142,7 @@ func acount(c echo.Context) error {
 	data := make(map[string]interface{}, 2)
 	data["name"] = sess.Values["name"]
 	data["userid"] = sess.Values["userid"]
-	fmt.Println("user id or user is : ", data["id"])
+	fmt.Println("user id or user is : ", data["userid"])
 	// TODO get all info like foto from db
 
 	if data["userid"] == nil {
@@ -181,6 +181,7 @@ func login(c echo.Context) error {
 		return c.Redirect(http.StatusSeeOther, "/") // 303 code
 		// TODO redirect to latest page
 	}
+	// TODO flush this message
 	return c.Render(200, "login.html", "Username or password is wrong")
 }
 
